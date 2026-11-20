@@ -3,6 +3,8 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Ginecologia.Modules.Auth.Api;
 using Ginecologia.Modules.Auth.Infrastructure;
+using Ginecologia.Modules.Citas.Api;
+using Ginecologia.Modules.Citas.Infrastructure;
 using Ginecologia.Modules.Pacientes.Api;
 using Ginecologia.Modules.Pacientes.Infrastructure;
 using Ginecologia.Modules.Prospeccion.Api;
@@ -28,6 +30,7 @@ builder.Services.AddAuthModule(connectionString, jwtOptions);
 builder.Services.AddUsuariosModule(connectionString);
 builder.Services.AddPacientesModule(connectionString);
 builder.Services.AddProspeccionModule(connectionString);
+builder.Services.AddCitasModule(connectionString);
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -60,6 +63,8 @@ using (var scope = app.Services.CreateScope())
     await pacientesDbContext.Database.MigrateAsync();
     var prospeccionDbContext = scope.ServiceProvider.GetRequiredService<ProspeccionDbContext>();
     await prospeccionDbContext.Database.MigrateAsync();
+    var citasDbContext = scope.ServiceProvider.GetRequiredService<CitasDbContext>();
+    await citasDbContext.Database.MigrateAsync();
 }
 await AuthSeed.SeedAdminAsync(
     app.Services,
@@ -73,5 +78,6 @@ app.MapAuthEndpoints();
 app.MapUsuariosEndpoints();
 app.MapPacientesEndpoints();
 app.MapProspeccionEndpoints();
+app.MapCitasEndpoints();
 
 app.Run();
