@@ -18,6 +18,7 @@ public sealed class AuthDbContext(DbContextOptions<AuthDbContext> options) : DbC
         account.HasIndex(x => x.Email).IsUnique();
         account.Property(x => x.PasswordHash).HasColumnName("password_hash").IsRequired();
         account.Property(x => x.Role).HasColumnName("role").HasMaxLength(32).IsRequired();
+        account.Property(x => x.IsActive).HasColumnName("is_active").IsRequired();
         account.Property(x => x.CreatedAtUtc).HasColumnName("created_at_utc").IsRequired();
     }
 }

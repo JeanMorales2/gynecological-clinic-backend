@@ -13,6 +13,7 @@ public static class AuthServiceCollectionExtensions
         services.AddSingleton<IPasswordService, PasswordHasherService>();
         services.AddSingleton(jwtOptions);
         services.AddSingleton<ITokenIssuer, JwtTokenIssuer>();
+        services.AddScoped<IAuthAccountManager, AuthAccountManager>();
         services.AddScoped<LoginUseCase>();
         services.AddScoped<GetCurrentUserUseCase>();
         return services;

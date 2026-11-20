@@ -4,12 +4,13 @@ public sealed class AuthAccount
 {
     private AuthAccount() { }
 
-    private AuthAccount(Guid id, string email, string passwordHash, string role, DateTime createdAtUtc)
+    private AuthAccount(Guid id, string email, string passwordHash, string role, bool isActive, DateTime createdAtUtc)
     {
         Id = id;
         Email = email;
         PasswordHash = passwordHash;
         Role = role;
+        IsActive = isActive;
         CreatedAtUtc = createdAtUtc;
     }
 
@@ -17,6 +18,7 @@ public sealed class AuthAccount
     public string Email { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
     public string Role { get; private set; } = string.Empty;
+    public bool IsActive { get; private set; }
     public DateTime CreatedAtUtc { get; private set; }
 
     public static AuthAccount Create(string email, string passwordHash, string role)
@@ -26,8 +28,18 @@ public sealed class AuthAccount
         if (role is not AuthRoles.Admin and not AuthRoles.Recepcionista and not AuthRoles.Ginecologa)
             throw new ArgumentException("El rol no es válido.", nameof(role));
 
-        return new AuthAccount(Guid.NewGuid(), normalizedEmail, passwordHash, role, DateTime.UtcNow);
+        return new AuthAccount(Guid.NewGuid(), normalizedEmail, passwordHash, role, true, DateTime.UtcNow);
     }
+
+    public void ChangeRole(string role)
+    {
+        if (role is not AuthRoles.Admin and not AuthRoles.Recepcionista and not AuthRoles.Ginecologa)
+            throw new ArgumentException("El rol no es válido.", nameof(role));
+
+        Role = role;
+    }
+
+    public void Deactivate() => IsActive = false;
 
     public static string NormalizeEmail(string email)
     {

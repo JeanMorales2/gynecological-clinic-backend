@@ -7,7 +7,7 @@ public sealed class LoginUseCase(IAuthAccountRepository accounts, IPasswordServi
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) return null;
 
         var account = await accounts.FindByEmailAsync(email, cancellationToken);
-        if (account is null || !passwords.Verify(account, password)) return null;
+        if (account is null || !account.IsActive || !passwords.Verify(account, password)) return null;
 
         var token = tokens.Issue(account);
         return new LoginResult(token.AccessToken, token.ExpiresAtUtc, PublicAuthUser.From(account));
