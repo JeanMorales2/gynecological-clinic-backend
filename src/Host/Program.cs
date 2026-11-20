@@ -1,9 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Text.Json.Serialization;
 using Ginecologia.Modules.Auth.Api;
 using Ginecologia.Modules.Auth.Infrastructure;
 using Ginecologia.Modules.Pacientes.Api;
 using Ginecologia.Modules.Pacientes.Infrastructure;
+using Ginecologia.Modules.Prospeccion.Api;
+using Ginecologia.Modules.Prospeccion.Infrastructure;
 using Ginecologia.Modules.Usuarios.Api;
 using Ginecologia.Modules.Usuarios.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -24,6 +27,8 @@ var jwtOptions = new JwtOptions(signingKey);
 builder.Services.AddAuthModule(connectionString, jwtOptions);
 builder.Services.AddUsuariosModule(connectionString);
 builder.Services.AddPacientesModule(connectionString);
+builder.Services.AddProspeccionModule(connectionString);
+builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -53,6 +58,8 @@ using (var scope = app.Services.CreateScope())
     await usuariosDbContext.Database.MigrateAsync();
     var pacientesDbContext = scope.ServiceProvider.GetRequiredService<PacientesDbContext>();
     await pacientesDbContext.Database.MigrateAsync();
+    var prospeccionDbContext = scope.ServiceProvider.GetRequiredService<ProspeccionDbContext>();
+    await prospeccionDbContext.Database.MigrateAsync();
 }
 await AuthSeed.SeedAdminAsync(
     app.Services,
@@ -65,5 +72,6 @@ app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 app.MapAuthEndpoints();
 app.MapUsuariosEndpoints();
 app.MapPacientesEndpoints();
+app.MapProspeccionEndpoints();
 
 app.Run();
