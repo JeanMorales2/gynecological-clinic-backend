@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules\Auth\Ginecologia.Modules.Auth.csproj" />
+    <ProjectReference Include="..\Modules\Usuarios\Ginecologia.Modules.Usuarios.csproj" />
+    <ProjectReference Include="..\Modules\Pacientes\Ginecologia.Modules.Pacientes.csproj" />
+    <ProjectReference Include="..\Modules\Prospeccion\Ginecologia.Modules.Prospeccion.csproj" />
+    <ProjectReference Include="..\Modules\Citas\Ginecologia.Modules.Citas.csproj" />
+    <ProjectReference Include="..\Modules\HistoriaClinica\Ginecologia.Modules.HistoriaClinica.csproj" />
+    <ProjectReference Include="..\Modules\LaboratorioExterno\Ginecologia.Modules.LaboratorioExterno.csproj" />
+    <ProjectReference Include="..\Modules\Facturacion\Ginecologia.Modules.Facturacion.csproj" />
+    <ProjectReference Include="..\Modules\Inventario\Ginecologia.Modules.Inventario.csproj" />
+    <ProjectReference Include="..\Modules\Promociones\Ginecologia.Modules.Promociones.csproj" />
+    <ProjectReference Include="..\Shared\Kernel\Ginecologia.Shared.Kernel.csproj" />
+    <ProjectReference Include="..\Shared\Infrastructure\Ginecologia.Shared.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>
