@@ -10,7 +10,7 @@ public interface IPatientRepository
     Task AddAsync(Patient patient, CancellationToken cancellationToken = default);
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }
-public sealed record PatientBirthdayDto(Guid PatientId, string NombreCompleto, int MesNacimiento, int DiaNacimiento);
+public sealed record PatientBirthdayDto(Guid PatientId, string NombreCompleto, string? Email, int MesNacimiento, int DiaNacimiento);
 
 public sealed record PatientDto(
     Guid Id,

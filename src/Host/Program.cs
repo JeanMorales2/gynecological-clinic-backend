@@ -13,6 +13,8 @@ using Ginecologia.Modules.HistoriaClinica.Api;
 using Ginecologia.Modules.HistoriaClinica.Infrastructure;
 using Ginecologia.Modules.LaboratorioExterno.Api;
 using Ginecologia.Modules.LaboratorioExterno.Infrastructure;
+using Ginecologia.Modules.Notificaciones.Api;
+using Ginecologia.Modules.Notificaciones.Infrastructure;
 using Ginecologia.Modules.Pacientes.Api;
 using Ginecologia.Modules.Pacientes.Infrastructure;
 using Ginecologia.Modules.Prospeccion.Api;
@@ -36,6 +38,16 @@ if (string.IsNullOrWhiteSpace(signingKey) || signingKey.Length < 32)
     throw new InvalidOperationException("JWT_SIGNING_KEY debe contener al menos 32 caracteres.");
 
 var jwtOptions = new JwtOptions(signingKey);
+var smtpPort = int.TryParse(builder.Configuration["SMTP_PORT"], out var configuredSmtpPort) ? configuredSmtpPort : 587;
+var smtpUseStartTls = !bool.TryParse(builder.Configuration["SMTP_USE_STARTTLS"], out var configuredUseStartTls) || configuredUseStartTls;
+var smtpOptions = new SmtpOptions(
+    builder.Configuration["SMTP_HOST"],
+    smtpPort,
+    builder.Configuration["SMTP_USERNAME"],
+    builder.Configuration["SMTP_PASSWORD"],
+    builder.Configuration["SMTP_FROM_EMAIL"],
+    builder.Configuration["SMTP_FROM_NAME"],
+    smtpUseStartTls);
 builder.Services.AddAuthModule(connectionString, jwtOptions);
 builder.Services.AddUsuariosModule(connectionString);
 builder.Services.AddPacientesModule(connectionString);
@@ -45,6 +57,7 @@ builder.Services.AddHistoriaClinicaModule(connectionString);
 builder.Services.AddLaboratorioExternoModule(connectionString);
 builder.Services.AddFacturacionModule(connectionString);
 builder.Services.AddInventarioModule(connectionString);
+builder.Services.AddNotificacionesModule(connectionString, smtpOptions);
 builder.Services.AddPromocionesModule(connectionString);
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -93,6 +106,8 @@ using (var scope = app.Services.CreateScope())
     await facturacionDbContext.Database.MigrateAsync();
     var inventarioDbContext = scope.ServiceProvider.GetRequiredService<InventarioDbContext>();
     await inventarioDbContext.Database.MigrateAsync();
+    var notificacionesDbContext = scope.ServiceProvider.GetRequiredService<NotificacionesDbContext>();
+    await notificacionesDbContext.Database.MigrateAsync();
     var promocionesDbContext = scope.ServiceProvider.GetRequiredService<PromocionesDbContext>();
     await promocionesDbContext.Database.MigrateAsync();
 }
@@ -113,6 +128,7 @@ app.MapHistoriaClinicaEndpoints();
 app.MapLaboratorioExternoEndpoints();
 app.MapFacturacionEndpoints();
 app.MapInventoryEndpoints();
+app.MapNotificationEndpoints();
 app.MapPromotionEndpoints();
 
 app.Run();

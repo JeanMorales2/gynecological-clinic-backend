@@ -1,4 +1,6 @@
 using Ginecologia.Modules.Pacientes.Application;
+using Ginecologia.Modules.Notificaciones.Application;
+using Ginecologia.Modules.Notificaciones.Domain;
 using Ginecologia.Modules.Promociones.Domain;
 namespace Ginecologia.Modules.Promociones.Application;
 internal static class PromotionDtoExtensions
@@ -9,7 +11,7 @@ internal static class PromotionDtoExtensions
         return PromotionDto.From(promotion, patient?.NombreCompleto);
     }
 }
-public sealed class GenerateBirthdayPromotionsUseCase(IPromotionRepository promotions, ListActivePatientsBirthdaysUseCase birthdays)
+public sealed class GenerateBirthdayPromotionsUseCase(IPromotionRepository promotions, ListActivePatientsBirthdaysUseCase birthdays, SendEmailNotificationUseCase sendEmailNotification)
 {
     public async Task<int> ExecuteAsync(DateOnly fecha, CancellationToken ct = default)
     {
@@ -18,7 +20,13 @@ public sealed class GenerateBirthdayPromotionsUseCase(IPromotionRepository promo
         {
             if (!HasBirthdayOn(patient, fecha) || await promotions.ExistsForPatientOnDateAsync(patient.PatientId, PromotionType.Cumpleanos, fecha, ct)) continue;
             var promotion = Promotion.Create(patient.PatientId, PromotionType.Cumpleanos, $"¡Feliz cumpleaños, {patient.NombreCompleto}!", "Te deseamos un feliz cumpleaños. Consultá por nuestra oferta especial de cumpleaños.", fecha);
-            await promotions.AddAsync(promotion, ct); generated++;
+            await promotions.AddAsync(promotion, ct);
+            if (!string.IsNullOrWhiteSpace(patient.Email))
+            {
+                var notification = await sendEmailNotification.ExecuteAsync(patient.Email, promotion.Titulo, promotion.Mensaje, ct);
+                if (notification.Estado == EmailNotificationStatus.Enviado) promotion.MarcarEnviada();
+            }
+            generated++;
         }
         if (generated > 0) await promotions.SaveChangesAsync(ct); return generated;
     }
