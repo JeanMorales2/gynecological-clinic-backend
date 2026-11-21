@@ -15,6 +15,7 @@ public static class PacientesServiceCollectionExtensions
         services.AddScoped<DeactivatePatientUseCase>();
         services.AddScoped<GetPatientUseCase>();
         services.AddScoped<ListPatientsUseCase>();
+        services.AddScoped<ListActivePatientsBirthdaysUseCase>();
         return services;
     }
 }

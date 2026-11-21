@@ -26,6 +26,9 @@ public sealed class PatientRepository(PacientesDbContext dbContext) : IPatientRe
         return new PagedResult<Patient>(items, totalCount, query.Page, query.PageSize);
     }
 
+    public async Task<IReadOnlyList<Patient>> ListActiveAsync(CancellationToken cancellationToken = default) =>
+        await dbContext.Patients.AsNoTracking().Where(x => x.Activo).OrderBy(x => x.NombreCompleto).ToListAsync(cancellationToken);
+
     public Task AddAsync(Patient patient, CancellationToken cancellationToken = default) =>
         dbContext.Patients.AddAsync(patient, cancellationToken).AsTask();
 

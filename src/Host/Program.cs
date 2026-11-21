@@ -7,6 +7,8 @@ using Ginecologia.Modules.Citas.Api;
 using Ginecologia.Modules.Citas.Infrastructure;
 using Ginecologia.Modules.Facturacion.Api;
 using Ginecologia.Modules.Facturacion.Infrastructure;
+using Ginecologia.Modules.Inventario.Api;
+using Ginecologia.Modules.Inventario.Infrastructure;
 using Ginecologia.Modules.HistoriaClinica.Api;
 using Ginecologia.Modules.HistoriaClinica.Infrastructure;
 using Ginecologia.Modules.LaboratorioExterno.Api;
@@ -15,6 +17,8 @@ using Ginecologia.Modules.Pacientes.Api;
 using Ginecologia.Modules.Pacientes.Infrastructure;
 using Ginecologia.Modules.Prospeccion.Api;
 using Ginecologia.Modules.Prospeccion.Infrastructure;
+using Ginecologia.Modules.Promociones.Api;
+using Ginecologia.Modules.Promociones.Infrastructure;
 using Ginecologia.Modules.Usuarios.Api;
 using Ginecologia.Modules.Usuarios.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -40,6 +44,8 @@ builder.Services.AddCitasModule(connectionString);
 builder.Services.AddHistoriaClinicaModule(connectionString);
 builder.Services.AddLaboratorioExternoModule(connectionString);
 builder.Services.AddFacturacionModule(connectionString);
+builder.Services.AddInventarioModule(connectionString);
+builder.Services.AddPromocionesModule(connectionString);
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -62,6 +68,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
     options.AddPolicy("RequireClinicalStaff", policy => policy.RequireRole("Admin", "Ginecologa"));
     options.AddPolicy("RequireBillingStaff", policy => policy.RequireRole("Admin", "Recepcionista"));
+    options.AddPolicy("RequireInventoryStaff", policy => policy.RequireRole("Admin", "Recepcionista"));
 });
 
 var app = builder.Build();
@@ -84,6 +91,10 @@ using (var scope = app.Services.CreateScope())
     await laboratorioExternoDbContext.Database.MigrateAsync();
     var facturacionDbContext = scope.ServiceProvider.GetRequiredService<FacturacionDbContext>();
     await facturacionDbContext.Database.MigrateAsync();
+    var inventarioDbContext = scope.ServiceProvider.GetRequiredService<InventarioDbContext>();
+    await inventarioDbContext.Database.MigrateAsync();
+    var promocionesDbContext = scope.ServiceProvider.GetRequiredService<PromocionesDbContext>();
+    await promocionesDbContext.Database.MigrateAsync();
 }
 await AuthSeed.SeedAdminAsync(
     app.Services,
@@ -101,5 +112,7 @@ app.MapCitasEndpoints();
 app.MapHistoriaClinicaEndpoints();
 app.MapLaboratorioExternoEndpoints();
 app.MapFacturacionEndpoints();
+app.MapInventoryEndpoints();
+app.MapPromotionEndpoints();
 
 app.Run();
