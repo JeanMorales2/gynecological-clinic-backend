@@ -5,6 +5,8 @@ using Ginecologia.Modules.Auth.Api;
 using Ginecologia.Modules.Auth.Infrastructure;
 using Ginecologia.Modules.Citas.Api;
 using Ginecologia.Modules.Citas.Infrastructure;
+using Ginecologia.Modules.HistoriaClinica.Api;
+using Ginecologia.Modules.HistoriaClinica.Infrastructure;
 using Ginecologia.Modules.Pacientes.Api;
 using Ginecologia.Modules.Pacientes.Infrastructure;
 using Ginecologia.Modules.Prospeccion.Api;
@@ -31,6 +33,7 @@ builder.Services.AddUsuariosModule(connectionString);
 builder.Services.AddPacientesModule(connectionString);
 builder.Services.AddProspeccionModule(connectionString);
 builder.Services.AddCitasModule(connectionString);
+builder.Services.AddHistoriaClinicaModule(connectionString);
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -49,7 +52,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddAuthorization(options =>
-    options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin")));
+{
+    options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("RequireClinicalStaff", policy => policy.RequireRole("Admin", "Ginecologa"));
+});
 
 var app = builder.Build();
 
@@ -65,6 +71,8 @@ using (var scope = app.Services.CreateScope())
     await prospeccionDbContext.Database.MigrateAsync();
     var citasDbContext = scope.ServiceProvider.GetRequiredService<CitasDbContext>();
     await citasDbContext.Database.MigrateAsync();
+    var historiaClinicaDbContext = scope.ServiceProvider.GetRequiredService<HistoriaClinicaDbContext>();
+    await historiaClinicaDbContext.Database.MigrateAsync();
 }
 await AuthSeed.SeedAdminAsync(
     app.Services,
@@ -79,5 +87,6 @@ app.MapUsuariosEndpoints();
 app.MapPacientesEndpoints();
 app.MapProspeccionEndpoints();
 app.MapCitasEndpoints();
+app.MapHistoriaClinicaEndpoints();
 
 app.Run();
