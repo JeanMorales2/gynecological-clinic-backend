@@ -7,7 +7,10 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5122",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionStrings__DefaultConnection": "Host=localhost;Port=5432;Database=ginecologia;Username=ginecologia;Password=local-development-only",
+        "JWT_SIGNING_KEY": "development-only-signing-key-change-this-before-production-2026",
+        "AUTH_SEED_ADMIN_PASSWORD": "CambiameYa123!"
       }
     },
     "https": {
@@ -16,7 +19,10 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7203;http://localhost:5122",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionStrings__DefaultConnection": "Host=localhost;Port=5432;Database=ginecologia;Username=ginecologia;Password=local-development-only",
+        "JWT_SIGNING_KEY": "development-only-signing-key-change-this-before-production-2026",
+        "AUTH_SEED_ADMIN_PASSWORD": "CambiameYa123!"
       }
     }
   }
