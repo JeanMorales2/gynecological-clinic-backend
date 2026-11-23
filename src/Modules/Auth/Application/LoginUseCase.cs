@@ -1,6 +1,8 @@
+using Ginecologia.Modules.Autorizacion.Application;
+
 namespace Ginecologia.Modules.Auth.Application;
 
-public sealed class LoginUseCase(IAuthAccountRepository accounts, IPasswordService passwords, ITokenIssuer tokens)
+public sealed class LoginUseCase(IAuthAccountRepository accounts, IPasswordService passwords, ITokenIssuer tokens, ListGrantedPermissionKeysUseCase listGrantedPermissionKeys)
 {
     public async Task<LoginResult?> ExecuteAsync(string email, string password, CancellationToken cancellationToken = default)
     {
@@ -10,6 +12,7 @@ public sealed class LoginUseCase(IAuthAccountRepository accounts, IPasswordServi
         if (account is null || !account.IsActive || !passwords.Verify(account, password)) return null;
 
         var token = tokens.Issue(account);
-        return new LoginResult(token.AccessToken, token.ExpiresAtUtc, PublicAuthUser.From(account));
+        var permisos = await listGrantedPermissionKeys.ExecuteAsync(account.Role, cancellationToken);
+        return new LoginResult(token.AccessToken, token.ExpiresAtUtc, new PublicAuthUser(account.Id, account.Email, account.Role, permisos));
     }
 }

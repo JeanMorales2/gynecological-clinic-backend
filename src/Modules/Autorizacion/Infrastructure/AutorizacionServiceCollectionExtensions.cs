@@ -13,6 +13,7 @@ public static class AutorizacionServiceCollectionExtensions
         services.AddDbContext<AutorizacionDbContext>(options => options.UseNpgsql(connectionString));
         services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
         services.AddScoped<ListPermissionsUseCase>();
+        services.AddScoped<ListGrantedPermissionKeysUseCase>();
         services.AddScoped<SetPermissionGrantUseCase>();
         services.AddScoped<IsRolePermittedUseCase>();
         services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();

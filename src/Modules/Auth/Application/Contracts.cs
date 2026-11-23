@@ -46,10 +46,7 @@ public static class AuthRoleValues
 public sealed class AuthAccountConflictException(string email)
     : InvalidOperationException($"Ya existe una cuenta para {email}.");
 
-public sealed record PublicAuthUser(Guid Id, string Email, string Role)
-{
-    public static PublicAuthUser From(AuthAccount account) => new(account.Id, account.Email, account.Role);
-}
+public sealed record PublicAuthUser(Guid Id, string Email, string Role, IReadOnlyList<string> Permisos);
 
 public sealed record IssuedToken(string AccessToken, DateTime ExpiresAtUtc);
 public sealed record LoginResult(string AccessToken, DateTime ExpiresAtUtc, PublicAuthUser User);

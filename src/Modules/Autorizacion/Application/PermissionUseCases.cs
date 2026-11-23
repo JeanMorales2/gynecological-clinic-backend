@@ -15,6 +15,18 @@ public sealed class ListPermissionsUseCase(IRolePermissionRepository repository)
     }
 }
 
+public sealed class ListGrantedPermissionKeysUseCase(IRolePermissionRepository repository)
+{
+    public async Task<IReadOnlyList<string>> ExecuteAsync(string role, CancellationToken ct = default)
+    {
+        var definitions = await repository.ListDefinitionsAsync(ct);
+        if (role == "Admin") return definitions.Select(d => d.Key).ToList();
+
+        var grants = await repository.ListGrantsAsync(ct);
+        return grants.Where(g => g.Role == role).Select(g => g.PermissionKey).ToList();
+    }
+}
+
 public sealed class SetPermissionGrantUseCase(IRolePermissionRepository repository)
 {
     public async Task ExecuteAsync(string role, string permissionKey, bool otorgado, CancellationToken ct = default)
