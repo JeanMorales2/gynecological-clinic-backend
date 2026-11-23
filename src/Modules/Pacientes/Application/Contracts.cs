@@ -10,6 +10,15 @@ public interface IPatientRepository
     Task AddAsync(Patient patient, CancellationToken cancellationToken = default);
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }
+
+public interface IFamilyMedicalHistoryRepository
+{
+    Task<IReadOnlyList<FamilyMedicalHistory>> ListByPatientIdAsync(Guid patientId, CancellationToken cancellationToken = default);
+    Task<FamilyMedicalHistory?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task AddAsync(FamilyMedicalHistory familyMedicalHistory, CancellationToken cancellationToken = default);
+    void RemoveAsync(FamilyMedicalHistory familyMedicalHistory);
+    Task SaveChangesAsync(CancellationToken cancellationToken = default);
+}
 public sealed record PatientBirthdayDto(Guid PatientId, string NombreCompleto, string? Email, int MesNacimiento, int DiaNacimiento);
 
 public sealed record PatientDto(
@@ -21,6 +30,9 @@ public sealed record PatientDto(
     string? DocumentoIdentidad,
     string? Alergias,
     string? AntecedentesRelevantes,
+    string? EnfermedadesCronicas,
+    string? EtsIts,
+    string? Vicios,
     bool Activo,
     DateTime CreatedAtUtc)
 {
@@ -33,6 +45,9 @@ public sealed record PatientDto(
         patient.DocumentoIdentidad,
         patient.Alergias,
         patient.AntecedentesRelevantes,
+        patient.EnfermedadesCronicas,
+        patient.EtsIts,
+        patient.Vicios,
         patient.Activo,
         patient.CreatedAtUtc);
 }
@@ -44,7 +59,10 @@ public sealed record CreatePatientCommand(
     string? Email,
     string? DocumentoIdentidad,
     string? Alergias,
-    string? AntecedentesRelevantes);
+    string? AntecedentesRelevantes,
+    string? EnfermedadesCronicas,
+    string? EtsIts,
+    string? Vicios);
 
 public sealed record UpdatePatientCommand(
     string NombreCompleto,
@@ -53,9 +71,23 @@ public sealed record UpdatePatientCommand(
     string? Email,
     string? DocumentoIdentidad,
     string? Alergias,
-    string? AntecedentesRelevantes);
+    string? AntecedentesRelevantes,
+    string? EnfermedadesCronicas,
+    string? EtsIts,
+    string? Vicios);
+
+public sealed record FamilyMedicalHistoryDto(Guid Id, Guid PatientId, string Condicion, string Parentesco, DateTime CreatedAtUtc)
+{
+    public static FamilyMedicalHistoryDto From(FamilyMedicalHistory familyMedicalHistory) => new(
+        familyMedicalHistory.Id,
+        familyMedicalHistory.PatientId,
+        familyMedicalHistory.Condicion,
+        familyMedicalHistory.Parentesco,
+        familyMedicalHistory.CreatedAtUtc);
+}
 
 public sealed record PatientListQuery(string? Search, int Page, int PageSize);
 public sealed record PagedResult<T>(IReadOnlyList<T> Items, int TotalCount, int Page, int PageSize);
 
 public sealed class PatientNotFoundException(Guid id) : KeyNotFoundException($"No existe el paciente {id}.");
+public sealed class FamilyMedicalHistoryNotFoundException(Guid id) : KeyNotFoundException($"No existe el antecedente familiar {id}.");

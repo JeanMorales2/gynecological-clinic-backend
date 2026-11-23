@@ -25,7 +25,10 @@ public sealed class ConvertProspectUseCase(IProspectRepository prospects, Create
             prospect.Email,
             command.DocumentoIdentidad,
             command.Alergias,
-            command.AntecedentesRelevantes), cancellationToken);
+            command.AntecedentesRelevantes,
+            null,
+            null,
+            null), cancellationToken);
 
         prospect.MarkAsConverted(patient.Id);
         await prospects.SaveChangesAsync(cancellationToken);

@@ -8,13 +8,14 @@ using QuestPDF.Infrastructure;
 
 namespace Ginecologia.Modules.HistoriaClinica.Application;
 
-public sealed class ExportClinicalHistoryPdfUseCase(IClinicalEntryRepository entries, GetPatientUseCase getPatient)
+public sealed class ExportClinicalHistoryPdfUseCase(IClinicalEntryRepository entries, GetPatientUseCase getPatient, ListFamilyMedicalHistoryUseCase listFamilyMedicalHistory)
 {
     public async Task<byte[]> ExecuteAsync(Guid patientId, CancellationToken cancellationToken = default)
     {
         if (patientId == Guid.Empty) throw new ArgumentException("El paciente es obligatorio.", nameof(patientId));
         var patient = await getPatient.ExecuteAsync(patientId, cancellationToken) ?? throw new ArgumentException("El paciente indicado no existe.", nameof(patientId));
         var clinicalEntries = await entries.ListAllByPatientIdAsync(patientId, cancellationToken);
+        var familyMedicalHistories = await listFamilyMedicalHistory.ExecuteAsync(patientId, cancellationToken);
         var logoPath = Path.Combine(AppContext.BaseDirectory, "Assets", "clinic-logo.png");
         var logo = File.Exists(logoPath) ? File.ReadAllBytes(logoPath) : null;
         var nicaragua = TimeZoneInfo.FindSystemTimeZoneById("America/Managua");
@@ -48,7 +49,16 @@ public sealed class ExportClinicalHistoryPdfUseCase(IClinicalEntryRepository ent
                         if (!string.IsNullOrWhiteSpace(patient.DocumentoIdentidad)) { text.Span("\nDocumento de identidad: ").SemiBold(); text.Span(patient.DocumentoIdentidad); }
                         if (!string.IsNullOrWhiteSpace(patient.Alergias)) { text.Span("\nAlergias: ").SemiBold(); text.Span(patient.Alergias); }
                         if (!string.IsNullOrWhiteSpace(patient.AntecedentesRelevantes)) { text.Span("\nAntecedentes relevantes: ").SemiBold(); text.Span(patient.AntecedentesRelevantes); }
+                        if (!string.IsNullOrWhiteSpace(patient.EnfermedadesCronicas)) { text.Span("\nEnfermedades crónicas: ").SemiBold(); text.Span(patient.EnfermedadesCronicas); }
+                        if (!string.IsNullOrWhiteSpace(patient.EtsIts)) { text.Span("\nETS/ITS: ").SemiBold(); text.Span(patient.EtsIts); }
+                        if (!string.IsNullOrWhiteSpace(patient.Vicios)) { text.Span("\nVicios: ").SemiBold(); text.Span(patient.Vicios); }
                     });
+                    if (familyMedicalHistories.Count > 0)
+                    {
+                        column.Item().PaddingTop(5).Text("Antecedentes familiares").SemiBold();
+                        foreach (var familyMedicalHistory in familyMedicalHistories)
+                            column.Item().Text($"{familyMedicalHistory.Condicion} ({familyMedicalHistory.Parentesco})");
+                    }
                     column.Item().PaddingTop(10).Text("Entradas cl\u00ednicas").FontSize(13).SemiBold();
                     if (clinicalEntries.Count == 0)
                         column.Item().Text("No hay entradas cl\u00ednicas registradas.").Italic().FontColor(Colors.Grey.Darken1);
@@ -60,6 +70,16 @@ public sealed class ExportClinicalHistoryPdfUseCase(IClinicalEntryRepository ent
                             entryColumn.Item().Text($"{entry.Fecha:dd/MM/yyyy} \u2014 {EntryTypeName(entry.Tipo)}").SemiBold();
                             EntryLine(entryColumn, "Motivo", entry.Motivo);
                             EntryLine(entryColumn, "Hallazgos", entry.Hallazgos);
+                            if (!string.IsNullOrWhiteSpace(entry.Tratamiento)) EntryLine(entryColumn, "Tratamiento", entry.Tratamiento);
+                            if (!string.IsNullOrWhiteSpace(entry.Medicamentos)) EntryLine(entryColumn, "Medicamentos", entry.Medicamentos);
+                            if (!string.IsNullOrWhiteSpace(entry.Examenes)) EntryLine(entryColumn, "Exámenes", entry.Examenes);
+                            if (entry.PesoKg is not null || entry.AlturaCm is not null)
+                            {
+                                var measurements = new List<string>();
+                                if (entry.PesoKg is not null) measurements.Add($"Peso: {entry.PesoKg.Value:F2} kg");
+                                if (entry.AlturaCm is not null) measurements.Add($"Altura: {entry.AlturaCm.Value:F1} cm");
+                                entryColumn.Item().Text(string.Join(" · ", measurements));
+                            }
                             if (!string.IsNullOrWhiteSpace(entry.Diagnostico)) EntryLine(entryColumn, "Diagn\u00f3stico", entry.Diagnostico);
                             if (!string.IsNullOrWhiteSpace(entry.Indicaciones)) EntryLine(entryColumn, "Indicaciones", entry.Indicaciones);
                         });

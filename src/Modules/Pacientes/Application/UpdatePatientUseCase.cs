@@ -12,7 +12,10 @@ public sealed class UpdatePatientUseCase(IPatientRepository patients)
             command.Email,
             command.DocumentoIdentidad,
             command.Alergias,
-            command.AntecedentesRelevantes);
+            command.AntecedentesRelevantes,
+            command.EnfermedadesCronicas,
+            command.EtsIts,
+            command.Vicios);
         await patients.SaveChangesAsync(cancellationToken);
         return PatientDto.From(patient);
     }

@@ -13,7 +13,7 @@ public sealed class ClinicalEntry
 {
     private ClinicalEntry() { }
 
-    private ClinicalEntry(Guid id, Guid patientId, ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, Guid registradoPorId)
+    private ClinicalEntry(Guid id, Guid patientId, ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, string? tratamiento, string? medicamentos, string? examenes, decimal? pesoKg, decimal? alturaCm, Guid registradoPorId)
     {
         Id = id;
         PatientId = RequiredId(patientId, nameof(patientId));
@@ -23,6 +23,11 @@ public sealed class ClinicalEntry
         Hallazgos = RequiredText(hallazgos, nameof(hallazgos), 8000);
         Diagnostico = OptionalText(diagnostico, 4000);
         Indicaciones = OptionalText(indicaciones, 4000);
+        Tratamiento = OptionalText(tratamiento, 4000);
+        Medicamentos = OptionalText(medicamentos, 4000);
+        Examenes = OptionalText(examenes, 4000);
+        PesoKg = ValidMeasurement(pesoKg, nameof(pesoKg));
+        AlturaCm = ValidMeasurement(alturaCm, nameof(alturaCm));
         RegistradoPorId = RequiredId(registradoPorId, nameof(registradoPorId));
         CreatedAtUtc = DateTime.UtcNow;
     }
@@ -35,14 +40,19 @@ public sealed class ClinicalEntry
     public string Hallazgos { get; private set; } = string.Empty;
     public string? Diagnostico { get; private set; }
     public string? Indicaciones { get; private set; }
+    public string? Tratamiento { get; private set; }
+    public string? Medicamentos { get; private set; }
+    public string? Examenes { get; private set; }
+    public decimal? PesoKg { get; private set; }
+    public decimal? AlturaCm { get; private set; }
     public Guid RegistradoPorId { get; private set; }
     public DateTime CreatedAtUtc { get; private set; }
 
-    public static ClinicalEntry Create(Guid patientId, ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, Guid registradoPorId) =>
-        new(Guid.NewGuid(), patientId, tipo, fecha, motivo, hallazgos, diagnostico, indicaciones, registradoPorId);
+    public static ClinicalEntry Create(Guid patientId, ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, string? tratamiento, string? medicamentos, string? examenes, decimal? pesoKg, decimal? alturaCm, Guid registradoPorId) =>
+        new(Guid.NewGuid(), patientId, tipo, fecha, motivo, hallazgos, diagnostico, indicaciones, tratamiento, medicamentos, examenes, pesoKg, alturaCm, registradoPorId);
 
     // Clinical records are never deleted. Updates are limited to correcting data-entry errors.
-    public void Update(ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones)
+    public void Update(ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, string? tratamiento, string? medicamentos, string? examenes, decimal? pesoKg, decimal? alturaCm)
     {
         Tipo = tipo;
         Fecha = fecha;
@@ -50,6 +60,18 @@ public sealed class ClinicalEntry
         Hallazgos = RequiredText(hallazgos, nameof(hallazgos), 8000);
         Diagnostico = OptionalText(diagnostico, 4000);
         Indicaciones = OptionalText(indicaciones, 4000);
+        Tratamiento = OptionalText(tratamiento, 4000);
+        Medicamentos = OptionalText(medicamentos, 4000);
+        Examenes = OptionalText(examenes, 4000);
+        PesoKg = ValidMeasurement(pesoKg, nameof(pesoKg));
+        AlturaCm = ValidMeasurement(alturaCm, nameof(alturaCm));
+    }
+
+    private static decimal? ValidMeasurement(decimal? value, string parameterName)
+    {
+        if (value is null) return null;
+        if (value <= 0) throw new ArgumentException("El valor debe ser mayor que cero.", parameterName);
+        return value;
     }
 
     private static Guid RequiredId(Guid value, string parameterName)

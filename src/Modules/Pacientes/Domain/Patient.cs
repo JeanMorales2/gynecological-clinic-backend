@@ -12,7 +12,10 @@ public sealed class Patient
         string? email,
         string? documentoIdentidad,
         string? alergias,
-        string? antecedentesRelevantes)
+        string? antecedentesRelevantes,
+        string? enfermedadesCronicas,
+        string? etsIts,
+        string? vicios)
     {
         Id = id;
         NombreCompleto = RequiredName(nombreCompleto);
@@ -22,6 +25,9 @@ public sealed class Patient
         DocumentoIdentidad = NormalizeOptional(documentoIdentidad);
         Alergias = NormalizeOptional(alergias);
         AntecedentesRelevantes = NormalizeOptional(antecedentesRelevantes);
+        EnfermedadesCronicas = NormalizeOptional(enfermedadesCronicas);
+        EtsIts = NormalizeOptional(etsIts);
+        Vicios = NormalizeOptional(vicios);
         Activo = true;
         CreatedAtUtc = DateTime.UtcNow;
     }
@@ -34,6 +40,9 @@ public sealed class Patient
     public string? DocumentoIdentidad { get; private set; }
     public string? Alergias { get; private set; }
     public string? AntecedentesRelevantes { get; private set; }
+    public string? EnfermedadesCronicas { get; private set; }
+    public string? EtsIts { get; private set; }
+    public string? Vicios { get; private set; }
     public bool Activo { get; private set; }
     public DateTime CreatedAtUtc { get; private set; }
 
@@ -44,8 +53,11 @@ public sealed class Patient
         string? email,
         string? documentoIdentidad,
         string? alergias,
-        string? antecedentesRelevantes) =>
-        new(Guid.NewGuid(), nombreCompleto, fechaNacimiento, telefono, email, documentoIdentidad, alergias, antecedentesRelevantes);
+        string? antecedentesRelevantes,
+        string? enfermedadesCronicas,
+        string? etsIts,
+        string? vicios) =>
+        new(Guid.NewGuid(), nombreCompleto, fechaNacimiento, telefono, email, documentoIdentidad, alergias, antecedentesRelevantes, enfermedadesCronicas, etsIts, vicios);
 
     public void Update(
         string nombreCompleto,
@@ -54,7 +66,10 @@ public sealed class Patient
         string? email,
         string? documentoIdentidad,
         string? alergias,
-        string? antecedentesRelevantes)
+        string? antecedentesRelevantes,
+        string? enfermedadesCronicas,
+        string? etsIts,
+        string? vicios)
     {
         NombreCompleto = RequiredName(nombreCompleto);
         FechaNacimiento = ValidBirthDate(fechaNacimiento);
@@ -63,6 +78,9 @@ public sealed class Patient
         DocumentoIdentidad = NormalizeOptional(documentoIdentidad);
         Alergias = NormalizeOptional(alergias);
         AntecedentesRelevantes = NormalizeOptional(antecedentesRelevantes);
+        EnfermedadesCronicas = NormalizeOptional(enfermedadesCronicas);
+        EtsIts = NormalizeOptional(etsIts);
+        Vicios = NormalizeOptional(vicios);
     }
 
     public void Deactivate() => Activo = false;

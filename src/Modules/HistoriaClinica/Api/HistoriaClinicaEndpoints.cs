@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Ginecologia.Modules.HistoriaClinica.Api;
 
-public sealed record CreateClinicalEntryRequest(Guid PatientId, ClinicalEntryType Tipo, DateOnly Fecha, string Motivo, string Hallazgos, string? Diagnostico, string? Indicaciones);
-public sealed record UpdateClinicalEntryRequest(ClinicalEntryType Tipo, DateOnly Fecha, string Motivo, string Hallazgos, string? Diagnostico, string? Indicaciones);
+public sealed record CreateClinicalEntryRequest(Guid PatientId, ClinicalEntryType Tipo, DateOnly Fecha, string Motivo, string Hallazgos, string? Diagnostico, string? Indicaciones, string? Tratamiento, string? Medicamentos, string? Examenes, decimal? PesoKg, decimal? AlturaCm);
+public sealed record UpdateClinicalEntryRequest(ClinicalEntryType Tipo, DateOnly Fecha, string Motivo, string Hallazgos, string? Diagnostico, string? Indicaciones, string? Tratamiento, string? Medicamentos, string? Examenes, decimal? PesoKg, decimal? AlturaCm);
 
 public static class HistoriaClinicaEndpoints
 {
@@ -52,7 +52,7 @@ public static class HistoriaClinicaEndpoints
         if (!Guid.TryParse(context.User.FindFirst("sub")?.Value, out var registradoPorId)) return Results.Unauthorized();
         try
         {
-            var entry = await useCase.ExecuteAsync(new CreateClinicalEntryCommand(request.PatientId, request.Tipo, request.Fecha, request.Motivo, request.Hallazgos, request.Diagnostico, request.Indicaciones, registradoPorId), cancellationToken);
+            var entry = await useCase.ExecuteAsync(new CreateClinicalEntryCommand(request.PatientId, request.Tipo, request.Fecha, request.Motivo, request.Hallazgos, request.Diagnostico, request.Indicaciones, request.Tratamiento, request.Medicamentos, request.Examenes, request.PesoKg, request.AlturaCm, registradoPorId), cancellationToken);
             return Results.Created($"/api/historia-clinica/{entry.Id}", entry);
         }
         catch (ArgumentException exception) { return Results.BadRequest(new { message = exception.Message }); }
@@ -60,7 +60,7 @@ public static class HistoriaClinicaEndpoints
 
     private static async Task<IResult> UpdateAsync(Guid id, UpdateClinicalEntryRequest request, UpdateClinicalEntryUseCase useCase, CancellationToken cancellationToken)
     {
-        try { return Results.Ok(await useCase.ExecuteAsync(id, new UpdateClinicalEntryCommand(request.Tipo, request.Fecha, request.Motivo, request.Hallazgos, request.Diagnostico, request.Indicaciones), cancellationToken)); }
+        try { return Results.Ok(await useCase.ExecuteAsync(id, new UpdateClinicalEntryCommand(request.Tipo, request.Fecha, request.Motivo, request.Hallazgos, request.Diagnostico, request.Indicaciones, request.Tratamiento, request.Medicamentos, request.Examenes, request.PesoKg, request.AlturaCm), cancellationToken)); }
         catch (ClinicalEntryNotFoundException) { return Results.NotFound(); }
         catch (ArgumentException exception) { return Results.BadRequest(new { message = exception.Message }); }
     }
