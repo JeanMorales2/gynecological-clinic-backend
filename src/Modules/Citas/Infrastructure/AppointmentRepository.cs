@@ -6,6 +6,11 @@ namespace Ginecologia.Modules.Citas.Infrastructure;
 
 public sealed class AppointmentRepository(CitasDbContext dbContext) : IAppointmentRepository
 {
+    // Nicaragua no tiene horario de verano (UTC-6 todo el año), pero usamos el id de zona IANA en vez
+    // de restar 6 horas a mano para que la conversion sea correcta si esto algun dia corre en otra
+    // region o .NET cambia como resuelve offsets.
+    private static readonly TimeZoneInfo ClinicTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Managua");
+
     public Task<Appointment?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
         dbContext.Appointments.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
@@ -17,7 +22,12 @@ public sealed class AppointmentRepository(CitasDbContext dbContext) : IAppointme
         if (query.Estado is { } estado) appointments = appointments.Where(x => x.Estado == estado);
         if (query.Fecha is { } fecha)
         {
-            var start = DateTime.SpecifyKind(fecha.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
+            // "fecha" es un dia calendario en hora de la clinica (Nicaragua), no en UTC: medianoche en
+            // Nicaragua es las 06:00 UTC, no las 00:00 UTC. Tratarlo como UTC puro (el bug original)
+            // corria el rango del dia 6 horas antes de lo debido, mostrando citas del dia equivocado
+            // cerca de la medianoche y dando la sensacion de que una edicion "no se guardo bien".
+            var localMidnight = DateTime.SpecifyKind(fecha.ToDateTime(TimeOnly.MinValue), DateTimeKind.Unspecified);
+            var start = TimeZoneInfo.ConvertTimeToUtc(localMidnight, ClinicTimeZone);
             var end = start.AddDays(1);
             appointments = appointments.Where(x => x.FechaHoraInicio >= start && x.FechaHoraInicio < end);
         }
