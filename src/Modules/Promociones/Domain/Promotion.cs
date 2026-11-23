@@ -1,5 +1,5 @@
 namespace Ginecologia.Modules.Promociones.Domain;
-public enum PromotionType { Cumpleanos }
+public enum PromotionType { Cumpleanos, DiaFestivo, ClienteFrecuente, TerceraEdad }
 public enum PromotionStatus { Generada, Enviada, Descartada }
 public sealed class Promotion
 {
