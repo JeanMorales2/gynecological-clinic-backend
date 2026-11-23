@@ -15,6 +15,7 @@ public static class ProspeccionServiceCollectionExtensions
         services.AddScoped<GetProspectUseCase>();
         services.AddScoped<ListProspectsUseCase>();
         services.AddScoped<ConvertProspectUseCase>();
+        services.AddScoped<InviteProspectUseCase>();
         return services;
     }
 }

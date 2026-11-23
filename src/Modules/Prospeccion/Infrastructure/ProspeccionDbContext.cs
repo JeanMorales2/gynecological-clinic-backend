@@ -16,6 +16,7 @@ public sealed class ProspeccionDbContext(DbContextOptions<ProspeccionDbContext> 
         prospect.Property(x => x.Id).HasColumnName("id");
         prospect.Property(x => x.NombreCompleto).HasColumnName("nombre_completo").HasMaxLength(200).IsRequired();
         prospect.Property(x => x.Telefono).HasColumnName("telefono").HasMaxLength(50).IsRequired();
+        prospect.Property(x => x.TelefonoAlternativo).HasColumnName("telefono_alternativo").HasMaxLength(50);
         prospect.Property(x => x.Email).HasColumnName("email").HasMaxLength(320);
         prospect.Property(x => x.Fuente).HasColumnName("fuente").HasMaxLength(200);
         prospect.Property(x => x.Estado).HasColumnName("estado").HasConversion<string>().HasMaxLength(20).IsRequired();

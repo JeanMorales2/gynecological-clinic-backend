@@ -13,11 +13,12 @@ public sealed class Prospect
 {
     private Prospect() { }
 
-    private Prospect(Guid id, string nombreCompleto, string telefono, string? email, string? fuente, string? notas)
+    private Prospect(Guid id, string nombreCompleto, string telefono, string? telefonoAlternativo, string? email, string? fuente, string? notas)
     {
         Id = id;
         NombreCompleto = RequiredName(nombreCompleto);
         Telefono = RequiredPhone(telefono);
+        TelefonoAlternativo = NormalizeOptional(telefonoAlternativo);
         Email = NormalizeOptional(email);
         Fuente = NormalizeOptional(fuente);
         Notas = NormalizeOptional(notas);
@@ -28,6 +29,7 @@ public sealed class Prospect
     public Guid Id { get; private set; }
     public string NombreCompleto { get; private set; } = string.Empty;
     public string Telefono { get; private set; } = string.Empty;
+    public string? TelefonoAlternativo { get; private set; }
     public string? Email { get; private set; }
     public string? Fuente { get; private set; }
     public ProspectStatus Estado { get; private set; }
@@ -35,10 +37,10 @@ public sealed class Prospect
     public Guid? PatientId { get; private set; }
     public DateTime CreatedAtUtc { get; private set; }
 
-    public static Prospect Create(string nombreCompleto, string telefono, string? email, string? fuente, string? notas) =>
-        new(Guid.NewGuid(), nombreCompleto, telefono, email, fuente, notas);
+    public static Prospect Create(string nombreCompleto, string telefono, string? telefonoAlternativo, string? email, string? fuente, string? notas) =>
+        new(Guid.NewGuid(), nombreCompleto, telefono, telefonoAlternativo, email, fuente, notas);
 
-    public void Update(string nombreCompleto, string telefono, string? email, string? fuente, ProspectStatus estado, string? notas)
+    public void Update(string nombreCompleto, string telefono, string? telefonoAlternativo, string? email, string? fuente, ProspectStatus estado, string? notas)
     {
         if (Estado == ProspectStatus.Convertido)
             throw new InvalidOperationException("Un prospecto convertido no se puede modificar desde el pipeline.");
@@ -47,6 +49,7 @@ public sealed class Prospect
 
         NombreCompleto = RequiredName(nombreCompleto);
         Telefono = RequiredPhone(telefono);
+        TelefonoAlternativo = NormalizeOptional(telefonoAlternativo);
         Email = NormalizeOptional(email);
         Fuente = NormalizeOptional(fuente);
         Estado = estado;
@@ -60,6 +63,11 @@ public sealed class Prospect
 
         Estado = ProspectStatus.Convertido;
         PatientId = patientId;
+    }
+
+    public void MarcarContactado()
+    {
+        if (Estado == ProspectStatus.Nuevo) Estado = ProspectStatus.Contactado;
     }
 
     private static string RequiredName(string value)
