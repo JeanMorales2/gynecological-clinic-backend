@@ -6,6 +6,7 @@ public interface IClinicalEntryRepository
 {
     Task<ClinicalEntry?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<PagedClinicalEntryResult<ClinicalEntry>> ListAsync(ClinicalEntryListQuery query, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<ClinicalEntry>> ListAllByPatientIdAsync(Guid patientId, CancellationToken cancellationToken = default);
     Task AddAsync(ClinicalEntry entry, CancellationToken cancellationToken = default);
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }
@@ -19,4 +20,4 @@ public sealed record ClinicalEntryDto(Guid Id, Guid PatientId, ClinicalEntryType
     public static ClinicalEntryDto From(ClinicalEntry entry) => new(entry.Id, entry.PatientId, entry.Tipo, entry.Fecha, entry.Motivo, entry.Hallazgos, entry.Diagnostico, entry.Indicaciones, entry.RegistradoPorId, entry.CreatedAtUtc);
 }
 
-public sealed class ClinicalEntryNotFoundException(Guid id) : KeyNotFoundException($"No existe la entrada clÃ­nica {id}.");
+public sealed class ClinicalEntryNotFoundException(Guid id) : KeyNotFoundException($"No existe la entrada clínica {id}.");

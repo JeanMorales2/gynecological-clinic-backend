@@ -8,6 +8,7 @@ public static class HistoriaClinicaServiceCollectionExtensions
 {
     public static IServiceCollection AddHistoriaClinicaModule(this IServiceCollection services, string connectionString)
     {
+        QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
         services.AddDbContext<HistoriaClinicaDbContext>(options => options.UseNpgsql(connectionString));
         services.AddScoped<IClinicalEntryRepository, ClinicalEntryRepository>();
         services.AddScoped<ClinicalEntryPatientValidator>();
@@ -15,6 +16,7 @@ public static class HistoriaClinicaServiceCollectionExtensions
         services.AddScoped<UpdateClinicalEntryUseCase>();
         services.AddScoped<GetClinicalEntryUseCase>();
         services.AddScoped<ListClinicalEntriesUseCase>();
+        services.AddScoped<ExportClinicalHistoryPdfUseCase>();
         return services;
     }
 }

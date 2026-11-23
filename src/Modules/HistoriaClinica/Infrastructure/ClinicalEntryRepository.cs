@@ -24,6 +24,10 @@ public sealed class ClinicalEntryRepository(HistoriaClinicaDbContext dbContext) 
         return new PagedClinicalEntryResult<ClinicalEntry>(items, totalCount, query.Page, query.PageSize);
     }
 
+    public async Task<IReadOnlyList<ClinicalEntry>> ListAllByPatientIdAsync(Guid patientId, CancellationToken cancellationToken = default) =>
+        await dbContext.ClinicalEntries.AsNoTracking().Where(x => x.PatientId == patientId)
+            .OrderBy(x => x.Fecha).ThenBy(x => x.CreatedAtUtc).ToListAsync(cancellationToken);
+
     public Task AddAsync(ClinicalEntry entry, CancellationToken cancellationToken = default) =>
         dbContext.ClinicalEntries.AddAsync(entry, cancellationToken).AsTask();
 
