@@ -3,6 +3,8 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Ginecologia.Modules.Auth.Api;
 using Ginecologia.Modules.Auth.Infrastructure;
+using Ginecologia.Modules.Autorizacion.Api;
+using Ginecologia.Modules.Autorizacion.Infrastructure;
 using Ginecologia.Modules.Citas.Api;
 using Ginecologia.Modules.Citas.Infrastructure;
 using Ginecologia.Modules.Facturacion.Api;
@@ -60,6 +62,7 @@ builder.Services.AddFacturacionModule(connectionString);
 builder.Services.AddInventarioModule(connectionString);
 builder.Services.AddNotificacionesModule(connectionString, smtpOptions);
 builder.Services.AddPromocionesModule(connectionString);
+builder.Services.AddAutorizacionModule(connectionString);
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -98,9 +101,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("RequireClinicalStaff", policy => policy.RequireRole("Admin", "Ginecologa"));
-    options.AddPolicy("RequireBillingStaff", policy => policy.RequireRole("Admin", "Recepcionista"));
-    options.AddPolicy("RequireInventoryStaff", policy => policy.RequireRole("Admin", "Recepcionista"));
 });
 
 var app = builder.Build();
@@ -135,6 +135,8 @@ using (var scope = app.Services.CreateScope())
     await notificacionesDbContext.Database.MigrateAsync();
     var promocionesDbContext = scope.ServiceProvider.GetRequiredService<PromocionesDbContext>();
     await promocionesDbContext.Database.MigrateAsync();
+    var autorizacionDbContext = scope.ServiceProvider.GetRequiredService<AutorizacionDbContext>();
+    await autorizacionDbContext.Database.MigrateAsync();
 }
 await AuthSeed.SeedAdminAsync(
     app.Services,
@@ -155,5 +157,6 @@ app.MapFacturacionEndpoints();
 app.MapInventoryEndpoints();
 app.MapNotificationEndpoints();
 app.MapPromotionEndpoints();
+app.MapAutorizacionEndpoints();
 
 app.Run();

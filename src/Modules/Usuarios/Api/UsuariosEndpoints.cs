@@ -1,4 +1,5 @@
 using Ginecologia.Modules.Auth.Application;
+using Ginecologia.Modules.Autorizacion.Api;
 using Ginecologia.Modules.Usuarios.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +14,7 @@ public static class UsuariosEndpoints
 {
     public static IEndpointRouteBuilder MapUsuariosEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        var usuarios = endpoints.MapGroup("/api/usuarios").RequireAuthorization("RequireAdmin");
+        var usuarios = endpoints.MapGroup("/api/usuarios").RequireAuthorization(policy => policy.AddRequirements(new PermissionRequirement("usuarios.gestionar")));
         usuarios.MapGet("/", ListAsync);
         usuarios.MapGet("/{id:guid}", GetAsync);
         usuarios.MapPost("/", CreateAsync);

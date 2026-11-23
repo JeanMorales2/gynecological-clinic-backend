@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Pacientes\Ginecologia.Modules.Pacientes.csproj" />
     <ProjectReference Include="..\HistoriaClinica\Ginecologia.Modules.HistoriaClinica.csproj" />
+    <ProjectReference Include="..\Autorizacion\Ginecologia.Modules.Autorizacion.csproj" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9"><PrivateAssets>all</PrivateAssets></PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9"><PrivateAssets>all</PrivateAssets></PackageReference>

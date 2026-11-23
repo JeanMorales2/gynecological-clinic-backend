@@ -1,5 +1,6 @@
 using Ginecologia.Modules.HistoriaClinica.Application;
 using Ginecologia.Modules.HistoriaClinica.Domain;
+using Ginecologia.Modules.Autorizacion.Api;
 using Ginecologia.Modules.Pacientes.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -18,8 +19,8 @@ public static class HistoriaClinicaEndpoints
         historiaClinica.MapGet("/", ListAsync);
         historiaClinica.MapGet("/{id:guid}", GetAsync);
         historiaClinica.MapGet("/pacientes/{patientId:guid}/exportar-pdf", ExportPdfAsync);
-        historiaClinica.MapPost("/", CreateAsync).RequireAuthorization("RequireClinicalStaff");
-        historiaClinica.MapPut("/{id:guid}", UpdateAsync).RequireAuthorization("RequireClinicalStaff");
+        historiaClinica.MapPost("/", CreateAsync).RequireAuthorization(policy => policy.AddRequirements(new PermissionRequirement("historia_clinica.gestionar")));
+        historiaClinica.MapPut("/{id:guid}", UpdateAsync).RequireAuthorization(policy => policy.AddRequirements(new PermissionRequirement("historia_clinica.gestionar")));
         return endpoints;
     }
 

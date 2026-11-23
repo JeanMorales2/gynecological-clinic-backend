@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -56,6 +56,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Promociones", "Promociones", "{CC1826AC-5599-8CB5-975F-1B887EA8DDDE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ginecologia.Modules.Promociones", "src\Modules\Promociones\Ginecologia.Modules.Promociones.csproj", "{15A04B0D-8196-4B3B-851F-C0C10E5ABA8E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{CA253913-39DE-BFD0-C9A3-4B7EC6FBDF17}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Autorizacion", "Autorizacion", "{A54273A7-C8F9-2DE9-32D2-044E17362875}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ginecologia.Modules.Autorizacion", "src\Modules\Autorizacion\Ginecologia.Modules.Autorizacion.csproj", "{0005D197-EFE6-4AA4-B168-A2ABEF188839}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -223,6 +229,18 @@ Global
 		{15A04B0D-8196-4B3B-851F-C0C10E5ABA8E}.Release|x64.Build.0 = Release|Any CPU
 		{15A04B0D-8196-4B3B-851F-C0C10E5ABA8E}.Release|x86.ActiveCfg = Release|Any CPU
 		{15A04B0D-8196-4B3B-851F-C0C10E5ABA8E}.Release|x86.Build.0 = Release|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Debug|x64.Build.0 = Debug|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Debug|x86.Build.0 = Debug|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Release|x64.ActiveCfg = Release|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Release|x64.Build.0 = Release|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Release|x86.ActiveCfg = Release|Any CPU
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -254,5 +272,7 @@ Global
 		{64DB9A43-1C6B-4A68-B25C-FB19EE809B63} = {55C73573-CAED-B0AD-864A-1D98E5643F92}
 		{CC1826AC-5599-8CB5-975F-1B887EA8DDDE} = {EC447DCF-ABFA-6E24-52A5-D7FD48A5C558}
 		{15A04B0D-8196-4B3B-851F-C0C10E5ABA8E} = {CC1826AC-5599-8CB5-975F-1B887EA8DDDE}
+		{A54273A7-C8F9-2DE9-32D2-044E17362875} = {CA253913-39DE-BFD0-C9A3-4B7EC6FBDF17}
+		{0005D197-EFE6-4AA4-B168-A2ABEF188839} = {A54273A7-C8F9-2DE9-32D2-044E17362875}
 	EndGlobalSection
 EndGlobal

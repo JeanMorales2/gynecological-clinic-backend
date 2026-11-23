@@ -1,5 +1,6 @@
 using Ginecologia.Modules.Citas.Application;
 using Ginecologia.Modules.Citas.Domain;
+using Ginecologia.Modules.Autorizacion.Api;
 using Ginecologia.Modules.Usuarios.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +24,7 @@ public static class CitasEndpoints
         citas.MapPost("/", CreateAsync);
         citas.MapPut("/{id:guid}", UpdateAsync);
         citas.MapPost("/{id:guid}/estado", ChangeStatusAsync);
-        var excepciones = citas.MapGroup("/excepciones").RequireAuthorization("RequireAdmin");
+        var excepciones = citas.MapGroup("/excepciones").RequireAuthorization(policy => policy.AddRequirements(new PermissionRequirement("citas.gestionar_excepciones")));
         excepciones.MapGet("/", ListScheduleExceptionsAsync);
         excepciones.MapPost("/", CreateScheduleExceptionAsync);
         excepciones.MapDelete("/{id:guid}", DeleteScheduleExceptionAsync);

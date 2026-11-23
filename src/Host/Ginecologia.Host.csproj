@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Modules\Inventario\Ginecologia.Modules.Inventario.csproj" />
     <ProjectReference Include="..\Modules\Notificaciones\Ginecologia.Modules.Notificaciones.csproj" />
     <ProjectReference Include="..\Modules\Promociones\Ginecologia.Modules.Promociones.csproj" />
+    <ProjectReference Include="..\Modules\Autorizacion\Ginecologia.Modules.Autorizacion.csproj" />
     <ProjectReference Include="..\Shared\Kernel\Ginecologia.Shared.Kernel.csproj" />
     <ProjectReference Include="..\Shared\Infrastructure\Ginecologia.Shared.Infrastructure.csproj" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 using Ginecologia.Modules.Notificaciones.Application;
 using Ginecologia.Modules.Notificaciones.Domain;
+using Ginecologia.Modules.Autorizacion.Api;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -12,7 +13,7 @@ public static class NotificationEndpoints
 {
     public static IEndpointRouteBuilder MapNotificationEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        var group = endpoints.MapGroup("/api/notificaciones").RequireAuthorization("RequireAdmin");
+        var group = endpoints.MapGroup("/api/notificaciones").RequireAuthorization(policy => policy.AddRequirements(new PermissionRequirement("notificaciones.gestionar")));
         group.MapGet("/", ListAsync);
         group.MapGet("/{id:guid}", GetAsync);
         group.MapPost("/probar", TestAsync);

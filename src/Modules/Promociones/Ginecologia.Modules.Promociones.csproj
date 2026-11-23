@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Autorizacion\Ginecologia.Modules.Autorizacion.csproj" />
     <ProjectReference Include="..\Pacientes\Ginecologia.Modules.Pacientes.csproj" />
     <ProjectReference Include="..\Notificaciones\Ginecologia.Modules.Notificaciones.csproj" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
