@@ -6,6 +6,7 @@ namespace Ginecologia.Modules.Citas.Infrastructure;
 public sealed class CitasDbContext(DbContextOptions<CitasDbContext> options) : DbContext(options)
 {
     public DbSet<Appointment> Appointments => Set<Appointment>();
+    public DbSet<ScheduleException> ScheduleExceptions => Set<ScheduleException>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,5 +25,14 @@ public sealed class CitasDbContext(DbContextOptions<CitasDbContext> options) : D
         appointment.Ignore(x => x.FechaHoraFin);
         appointment.HasIndex(x => new { x.ProfesionalId, x.FechaHoraInicio }).HasDatabaseName("ix_appointments_profesional_inicio");
         appointment.HasIndex(x => x.PatientId).HasDatabaseName("ix_appointments_patient");
+
+        var scheduleException = modelBuilder.Entity<ScheduleException>();
+        scheduleException.ToTable("schedule_exceptions");
+        scheduleException.HasKey(x => x.Id);
+        scheduleException.Property(x => x.Id).HasColumnName("id");
+        scheduleException.Property(x => x.Fecha).HasColumnName("fecha").HasColumnType("date").IsRequired();
+        scheduleException.Property(x => x.Descripcion).HasColumnName("descripcion").IsRequired();
+        scheduleException.Property(x => x.CreatedAtUtc).HasColumnName("created_at_utc").HasColumnType("timestamp with time zone").IsRequired();
+        scheduleException.HasIndex(x => x.Fecha).IsUnique().HasDatabaseName("ix_schedule_exceptions_fecha");
     }
 }

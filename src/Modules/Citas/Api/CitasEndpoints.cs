@@ -10,6 +10,7 @@ namespace Ginecologia.Modules.Citas.Api;
 public sealed record CreateAppointmentRequest(Guid PatientId, Guid ProfesionalId, DateTime FechaHoraInicio, int DuracionMinutos = 30, string? Notas = null);
 public sealed record UpdateAppointmentRequest(Guid PatientId, Guid ProfesionalId, DateTime FechaHoraInicio, int DuracionMinutos, string? Notas);
 public sealed record ChangeAppointmentStatusRequest(AppointmentStatus Estado);
+public sealed record CreateScheduleExceptionRequest(DateOnly Fecha, string Descripcion);
 
 public static class CitasEndpoints
 {
@@ -22,6 +23,10 @@ public static class CitasEndpoints
         citas.MapPost("/", CreateAsync);
         citas.MapPut("/{id:guid}", UpdateAsync);
         citas.MapPost("/{id:guid}/estado", ChangeStatusAsync);
+        var excepciones = citas.MapGroup("/excepciones").RequireAuthorization("RequireAdmin");
+        excepciones.MapGet("/", ListScheduleExceptionsAsync);
+        excepciones.MapPost("/", CreateScheduleExceptionAsync);
+        excepciones.MapDelete("/{id:guid}", DeleteScheduleExceptionAsync);
         return endpoints;
     }
 
@@ -57,6 +62,29 @@ public static class CitasEndpoints
         try { return Results.Ok(await useCase.ExecuteAsync(id, request.Estado, cancellationToken)); }
         catch (AppointmentNotFoundException) { return Results.NotFound(); }
         catch (InvalidOperationException exception) { return Results.BadRequest(new { message = exception.Message }); }
+    }
+
+    private static Task<IReadOnlyList<ScheduleExceptionDto>> ListScheduleExceptionsAsync(DateOnly? desde, DateOnly? hasta, ListScheduleExceptionsUseCase useCase, CancellationToken cancellationToken) =>
+        useCase.ExecuteAsync(desde, hasta, cancellationToken);
+
+    private static async Task<IResult> CreateScheduleExceptionAsync(CreateScheduleExceptionRequest request, CreateScheduleExceptionUseCase useCase, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var scheduleException = await useCase.ExecuteAsync(request.Fecha, request.Descripcion, cancellationToken);
+            return Results.Created($"/api/citas/excepciones/{scheduleException.Id}", scheduleException);
+        }
+        catch (ArgumentException exception) { return Results.BadRequest(new { message = exception.Message }); }
+    }
+
+    private static async Task<IResult> DeleteScheduleExceptionAsync(Guid id, DeleteScheduleExceptionUseCase useCase, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await useCase.ExecuteAsync(id, cancellationToken);
+            return Results.NoContent();
+        }
+        catch (ScheduleExceptionNotFoundException) { return Results.NotFound(); }
     }
 
     private static async Task<IResult> ListProfesionalesAsync(ListStaffUseCase useCase, CancellationToken cancellationToken)

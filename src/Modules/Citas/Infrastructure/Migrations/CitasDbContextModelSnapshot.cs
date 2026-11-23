@@ -32,6 +32,16 @@ public partial class CitasDbContextModelSnapshot : ModelSnapshot
             b.HasIndex("ProfesionalId", "FechaHoraInicio").HasDatabaseName("ix_appointments_profesional_inicio");
             b.ToTable("appointments", "citas");
         });
+        modelBuilder.Entity("Ginecologia.Modules.Citas.Domain.ScheduleException", b =>
+        {
+            b.Property<Guid>("Id").ValueGeneratedOnAdd().HasColumnType("uuid").HasColumnName("id");
+            b.Property<DateTime>("CreatedAtUtc").HasColumnType("timestamp with time zone").HasColumnName("created_at_utc");
+            b.Property<string>("Descripcion").IsRequired().HasColumnType("text").HasColumnName("descripcion");
+            b.Property<DateOnly>("Fecha").HasColumnType("date").HasColumnName("fecha");
+            b.HasKey("Id");
+            b.HasIndex("Fecha").IsUnique().HasDatabaseName("ix_schedule_exceptions_fecha");
+            b.ToTable("schedule_exceptions", "citas");
+        });
 #pragma warning restore 612, 618
     }
 }

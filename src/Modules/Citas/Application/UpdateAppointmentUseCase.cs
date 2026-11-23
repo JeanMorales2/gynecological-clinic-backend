@@ -2,7 +2,7 @@ using Ginecologia.Modules.Citas.Domain;
 
 namespace Ginecologia.Modules.Citas.Application;
 
-public sealed class UpdateAppointmentUseCase(IAppointmentRepository appointments, AppointmentParticipantsValidator participants, AppointmentDtoMapper mapper)
+public sealed class UpdateAppointmentUseCase(IAppointmentRepository appointments, AppointmentParticipantsValidator participants, BusinessHoursValidator businessHours, AppointmentDtoMapper mapper)
 {
     public async Task<AppointmentDto> ExecuteAsync(Guid id, UpdateAppointmentCommand command, CancellationToken cancellationToken = default)
     {
@@ -14,6 +14,7 @@ public sealed class UpdateAppointmentUseCase(IAppointmentRepository appointments
         // Create a transient aggregate first so the same UTC and duration rules used by
         // creation are enforced before calculating the prospective end time.
         var rescheduled = Appointment.Create(command.PatientId, command.ProfesionalId, command.FechaHoraInicio, command.DuracionMinutos, command.Notas);
+        await businessHours.ValidateAsync(rescheduled.FechaHoraInicio, rescheduled.FechaHoraFin, cancellationToken);
         if (await appointments.HasOverlapAsync(rescheduled.ProfesionalId, rescheduled.FechaHoraInicio, rescheduled.FechaHoraFin, id, cancellationToken))
             throw new ArgumentException("El profesional ya tiene una cita que se solapa con ese horario.");
 

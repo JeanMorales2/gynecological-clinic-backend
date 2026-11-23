@@ -10,13 +10,18 @@ public static class CitasServiceCollectionExtensions
     {
         services.AddDbContext<CitasDbContext>(options => options.UseNpgsql(connectionString));
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+        services.AddScoped<IScheduleExceptionRepository, ScheduleExceptionRepository>();
         services.AddScoped<AppointmentParticipantsValidator>();
+        services.AddScoped<BusinessHoursValidator>();
         services.AddScoped<AppointmentDtoMapper>();
         services.AddScoped<CreateAppointmentUseCase>();
         services.AddScoped<UpdateAppointmentUseCase>();
         services.AddScoped<ChangeAppointmentStatusUseCase>();
         services.AddScoped<GetAppointmentUseCase>();
         services.AddScoped<ListAppointmentsUseCase>();
+        services.AddScoped<CreateScheduleExceptionUseCase>();
+        services.AddScoped<DeleteScheduleExceptionUseCase>();
+        services.AddScoped<ListScheduleExceptionsUseCase>();
         return services;
     }
 }
