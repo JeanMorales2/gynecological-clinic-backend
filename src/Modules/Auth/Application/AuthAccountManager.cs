@@ -38,4 +38,12 @@ public sealed class AuthAccountManager(IAuthAccountRepository accounts, IPasswor
         account.Deactivate();
         await accounts.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task ActivateAsync(Guid accountId, CancellationToken cancellationToken = default)
+    {
+        var account = await accounts.FindByIdAsync(accountId, cancellationToken)
+            ?? throw new KeyNotFoundException("No existe la cuenta de autenticación.");
+        account.Activate();
+        await accounts.SaveChangesAsync(cancellationToken);
+    }
 }

@@ -19,6 +19,7 @@ public static class UsuariosEndpoints
         usuarios.MapPost("/", CreateAsync);
         usuarios.MapPut("/{id:guid}", UpdateAsync);
         usuarios.MapPost("/{id:guid}/desactivar", DeactivateAsync);
+        usuarios.MapPost("/{id:guid}/reactivar", ReactivateAsync);
         return endpoints;
     }
 
@@ -50,6 +51,12 @@ public static class UsuariosEndpoints
     }
 
     private static async Task<IResult> DeactivateAsync(Guid id, DeactivateStaffUseCase useCase, CancellationToken cancellationToken)
+    {
+        try { return Results.Ok(await useCase.ExecuteAsync(id, cancellationToken)); }
+        catch (StaffNotFoundException) { return Results.NotFound(); }
+    }
+
+    private static async Task<IResult> ReactivateAsync(Guid id, ReactivateStaffUseCase useCase, CancellationToken cancellationToken)
     {
         try { return Results.Ok(await useCase.ExecuteAsync(id, cancellationToken)); }
         catch (StaffNotFoundException) { return Results.NotFound(); }

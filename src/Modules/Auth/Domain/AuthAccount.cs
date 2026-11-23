@@ -41,6 +41,8 @@ public sealed class AuthAccount
 
     public void Deactivate() => IsActive = false;
 
+    public void Activate() => IsActive = true;
+
     public static string NormalizeEmail(string email)
     {
         var normalized = email.Trim().ToLowerInvariant();

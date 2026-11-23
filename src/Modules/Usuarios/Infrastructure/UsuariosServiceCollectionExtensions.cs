@@ -13,6 +13,7 @@ public static class UsuariosServiceCollectionExtensions
         services.AddScoped<CreateStaffUseCase>();
         services.AddScoped<UpdateStaffUseCase>();
         services.AddScoped<DeactivateStaffUseCase>();
+        services.AddScoped<ReactivateStaffUseCase>();
         services.AddScoped<ListStaffUseCase>();
         services.AddScoped<GetStaffUseCase>();
         return services;

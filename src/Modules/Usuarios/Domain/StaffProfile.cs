@@ -36,6 +36,8 @@ public sealed class StaffProfile
 
     public void Deactivate() => Activo = false;
 
+    public void Reactivate() => Activo = true;
+
     private static string RequiredName(string value)
     {
         var name = value.Trim();

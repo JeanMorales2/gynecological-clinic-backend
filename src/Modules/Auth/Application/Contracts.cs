@@ -28,6 +28,7 @@ public interface IAuthAccountManager
     Task<AuthAccountSummary> CreateAsync(CreateAuthAccountRequest request, CancellationToken cancellationToken = default);
     Task ChangeRoleAsync(Guid accountId, string role, CancellationToken cancellationToken = default);
     Task DeactivateAsync(Guid accountId, CancellationToken cancellationToken = default);
+    Task ActivateAsync(Guid accountId, CancellationToken cancellationToken = default);
 }
 
 public sealed record CreateAuthAccountRequest(string Email, string Password, string Role);
