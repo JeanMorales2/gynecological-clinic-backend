@@ -8,7 +8,7 @@ public static class CitasServiceCollectionExtensions
 {
     public static IServiceCollection AddCitasModule(this IServiceCollection services, string connectionString)
     {
-        services.AddDbContext<CitasDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<CitasDbContext>(options => options.UseNpgsql(connectionString, npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "citas")));
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         services.AddScoped<IScheduleExceptionRepository, ScheduleExceptionRepository>();
         services.AddScoped<AppointmentParticipantsValidator>();

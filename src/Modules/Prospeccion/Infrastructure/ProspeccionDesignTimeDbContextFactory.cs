@@ -8,7 +8,7 @@ public sealed class ProspeccionDesignTimeDbContextFactory : IDesignTimeDbContext
     public ProspeccionDbContext CreateDbContext(string[] args)
     {
         var options = new DbContextOptionsBuilder<ProspeccionDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=ginecologia;Username=ginecologia;Password=local-development-only")
+            .UseNpgsql("Host=localhost;Port=5432;Database=ginecologia;Username=ginecologia;Password=local-development-only", npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "prospeccion"))
             .Options;
         return new ProspeccionDbContext(options);
     }

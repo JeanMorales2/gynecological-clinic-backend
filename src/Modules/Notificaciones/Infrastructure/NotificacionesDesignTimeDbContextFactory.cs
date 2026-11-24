@@ -8,6 +8,6 @@ public sealed class NotificacionesDesignTimeDbContextFactory : IDesignTimeDbCont
     public NotificacionesDbContext CreateDbContext(string[] args)
     {
         var connection = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection") ?? "Host=localhost;Database=ginecologia;Username=postgres;Password=postgres";
-        return new(new DbContextOptionsBuilder<NotificacionesDbContext>().UseNpgsql(connection).Options);
+        return new(new DbContextOptionsBuilder<NotificacionesDbContext>().UseNpgsql(connection, npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "notificaciones")).Options);
     }
 }

@@ -7,6 +7,6 @@ public sealed class AutorizacionDesignTimeDbContextFactory : IDesignTimeDbContex
 {
     public AutorizacionDbContext CreateDbContext(string[] args) => new(
         new DbContextOptionsBuilder<AutorizacionDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=ginecologia;Username=ginecologia;Password=local-development-only")
+            .UseNpgsql("Host=localhost;Port=5432;Database=ginecologia;Username=ginecologia;Password=local-development-only", npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "autorizacion"))
             .Options);
 }

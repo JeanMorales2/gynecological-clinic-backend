@@ -8,7 +8,7 @@ public static class PacientesServiceCollectionExtensions
 {
     public static IServiceCollection AddPacientesModule(this IServiceCollection services, string connectionString)
     {
-        services.AddDbContext<PacientesDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<PacientesDbContext>(options => options.UseNpgsql(connectionString, npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "pacientes")));
         services.AddScoped<IPatientRepository, PatientRepository>();
         services.AddScoped<IFamilyMedicalHistoryRepository, FamilyMedicalHistoryRepository>();
         services.AddScoped<CreatePatientUseCase>();

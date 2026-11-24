@@ -8,7 +8,7 @@ public static class AuthServiceCollectionExtensions
 {
     public static IServiceCollection AddAuthModule(this IServiceCollection services, string connectionString, JwtOptions jwtOptions)
     {
-        services.AddDbContext<AuthDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<AuthDbContext>(options => options.UseNpgsql(connectionString, npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "auth")));
         services.AddScoped<IAuthAccountRepository, AuthAccountRepository>();
         services.AddSingleton<IPasswordService, PasswordHasherService>();
         services.AddSingleton(jwtOptions);

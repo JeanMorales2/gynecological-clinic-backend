@@ -8,7 +8,7 @@ public sealed class CitasDesignTimeDbContextFactory : IDesignTimeDbContextFactor
     public CitasDbContext CreateDbContext(string[] args)
     {
         var options = new DbContextOptionsBuilder<CitasDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=ginecologia;Username=ginecologia;Password=local-development-only")
+            .UseNpgsql("Host=localhost;Port=5432;Database=ginecologia;Username=ginecologia;Password=local-development-only", npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "citas"))
             .Options;
         return new CitasDbContext(options);
     }

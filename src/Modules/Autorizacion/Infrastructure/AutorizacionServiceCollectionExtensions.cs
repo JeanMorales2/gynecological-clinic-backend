@@ -10,7 +10,7 @@ public static class AutorizacionServiceCollectionExtensions
 {
     public static IServiceCollection AddAutorizacionModule(this IServiceCollection services, string connectionString)
     {
-        services.AddDbContext<AutorizacionDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<AutorizacionDbContext>(options => options.UseNpgsql(connectionString, npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "autorizacion")));
         services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
         services.AddScoped<ListPermissionsUseCase>();
         services.AddScoped<ListGrantedPermissionKeysUseCase>();

@@ -8,7 +8,7 @@ public sealed class PacientesDesignTimeDbContextFactory : IDesignTimeDbContextFa
     public PacientesDbContext CreateDbContext(string[] args)
     {
         var options = new DbContextOptionsBuilder<PacientesDbContext>()
-            .UseNpgsql("Host=localhost;Port=5432;Database=ginecologia;Username=ginecologia;Password=local-development-only")
+            .UseNpgsql("Host=localhost;Port=5432;Database=ginecologia;Username=ginecologia;Password=local-development-only", npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "pacientes"))
             .Options;
         return new PacientesDbContext(options);
     }

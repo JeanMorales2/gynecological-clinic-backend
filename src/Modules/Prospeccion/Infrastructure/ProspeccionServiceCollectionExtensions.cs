@@ -8,7 +8,7 @@ public static class ProspeccionServiceCollectionExtensions
 {
     public static IServiceCollection AddProspeccionModule(this IServiceCollection services, string connectionString)
     {
-        services.AddDbContext<ProspeccionDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<ProspeccionDbContext>(options => options.UseNpgsql(connectionString, npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "prospeccion")));
         services.AddScoped<IProspectRepository, ProspectRepository>();
         services.AddScoped<CreateProspectUseCase>();
         services.AddScoped<UpdateProspectUseCase>();

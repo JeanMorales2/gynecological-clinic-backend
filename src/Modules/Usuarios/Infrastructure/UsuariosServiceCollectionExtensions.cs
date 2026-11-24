@@ -8,7 +8,7 @@ public static class UsuariosServiceCollectionExtensions
 {
     public static IServiceCollection AddUsuariosModule(this IServiceCollection services, string connectionString)
     {
-        services.AddDbContext<UsuariosDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<UsuariosDbContext>(options => options.UseNpgsql(connectionString, npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "usuarios")));
         services.AddScoped<IStaffProfileRepository, StaffProfileRepository>();
         services.AddScoped<CreateStaffUseCase>();
         services.AddScoped<UpdateStaffUseCase>();
