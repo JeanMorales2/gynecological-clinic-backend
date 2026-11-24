@@ -39,6 +39,12 @@ public sealed class AuthAccount
         Role = role;
     }
 
+    public void SetPasswordHash(string passwordHash)
+    {
+        if (string.IsNullOrWhiteSpace(passwordHash)) throw new ArgumentException("El hash de contraseña es obligatorio.", nameof(passwordHash));
+        PasswordHash = passwordHash;
+    }
+
     public void Deactivate() => IsActive = false;
 
     public void Activate() => IsActive = true;

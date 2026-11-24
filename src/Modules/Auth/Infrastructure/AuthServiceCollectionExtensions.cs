@@ -16,6 +16,7 @@ public static class AuthServiceCollectionExtensions
         services.AddScoped<IAuthAccountManager, AuthAccountManager>();
         services.AddScoped<LoginUseCase>();
         services.AddScoped<GetCurrentUserUseCase>();
+        services.AddScoped<ChangePasswordUseCase>();
         return services;
     }
 }

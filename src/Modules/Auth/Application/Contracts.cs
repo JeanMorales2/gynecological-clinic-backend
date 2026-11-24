@@ -46,6 +46,9 @@ public static class AuthRoleValues
 public sealed class AuthAccountConflictException(string email)
     : InvalidOperationException($"Ya existe una cuenta para {email}.");
 
+public sealed class InvalidCurrentPasswordException()
+    : InvalidOperationException("La contraseña actual no es correcta.");
+
 public sealed record PublicAuthUser(Guid Id, string Email, string Role, IReadOnlyList<string> Permisos);
 
 public sealed record IssuedToken(string AccessToken, DateTime ExpiresAtUtc);

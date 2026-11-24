@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 namespace Ginecologia.Modules.Auth.Api;
 
 public sealed record LoginRequest(string Email, string Password);
+public sealed record ChangePasswordRequest(string CurrentPassword, string NewPassword);
 
 public static class AuthEndpoints
 {
@@ -15,6 +16,7 @@ public static class AuthEndpoints
         var auth = endpoints.MapGroup("/api/auth");
         auth.MapPost("/login", LoginAsync);
         auth.MapGet("/me", GetCurrentUserAsync).RequireAuthorization();
+        auth.MapPost("/cambiar-password", ChangePasswordAsync).RequireAuthorization();
         return endpoints;
     }
 
@@ -31,5 +33,20 @@ public static class AuthEndpoints
 
         var user = await currentUser.ExecuteAsync(accountId, cancellationToken);
         return user is null ? Results.Unauthorized() : Results.Ok(user);
+    }
+
+    private static async Task<IResult> ChangePasswordAsync(ChangePasswordRequest request, HttpContext context, ChangePasswordUseCase changePassword, CancellationToken cancellationToken)
+    {
+        var subject = context.User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+        if (!Guid.TryParse(subject, out var accountId)) return Results.Unauthorized();
+
+        try
+        {
+            await changePassword.ExecuteAsync(accountId, request.CurrentPassword, request.NewPassword, cancellationToken);
+            return Results.NoContent();
+        }
+        catch (KeyNotFoundException) { return Results.Unauthorized(); }
+        catch (InvalidCurrentPasswordException exception) { return Results.BadRequest(new { message = exception.Message }); }
+        catch (ArgumentException exception) { return Results.BadRequest(new { message = exception.Message }); }
     }
 }
