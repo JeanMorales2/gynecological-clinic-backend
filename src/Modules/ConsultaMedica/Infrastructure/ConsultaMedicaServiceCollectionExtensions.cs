@@ -1,0 +1,5 @@
+using Ginecologia.Modules.ConsultaMedica.Application;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+namespace Ginecologia.Modules.ConsultaMedica.Infrastructure;
+public static class ConsultaMedicaServiceCollectionExtensions { public static IServiceCollection AddConsultaMedicaModule(this IServiceCollection s,string connectionString) { QuestPDF.Settings.License=QuestPDF.Infrastructure.LicenseType.Community;s.AddDbContext<ConsultaMedicaDbContext>(o=>o.UseNpgsql(connectionString));s.AddScoped<IConsultaRepository,ConsultaRepository>();s.AddScoped<CreateConsultaUseCase>();s.AddScoped<UpdateConsultaUseCase>();s.AddScoped<FinalizeConsultaUseCase>();s.AddScoped<GetConsultaUseCase>();s.AddScoped<ListConsultasUseCase>();s.AddScoped<UploadConsultaAttachmentUseCase>();s.AddScoped<DeleteConsultaAttachmentUseCase>();s.AddScoped<GetConsultaAttachmentContentUseCase>();s.AddScoped<ExportConsultaPrescriptionPdfUseCase>();return s; } }

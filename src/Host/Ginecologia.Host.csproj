@@ -7,6 +7,7 @@
     <ProjectReference Include="..\Modules\Prospeccion\Ginecologia.Modules.Prospeccion.csproj" />
     <ProjectReference Include="..\Modules\Citas\Ginecologia.Modules.Citas.csproj" />
     <ProjectReference Include="..\Modules\HistoriaClinica\Ginecologia.Modules.HistoriaClinica.csproj" />
+    <ProjectReference Include="..\Modules\ConsultaMedica\Ginecologia.Modules.ConsultaMedica.csproj" />
     <ProjectReference Include="..\Modules\LaboratorioExterno\Ginecologia.Modules.LaboratorioExterno.csproj" />
     <ProjectReference Include="..\Modules\Facturacion\Ginecologia.Modules.Facturacion.csproj" />
     <ProjectReference Include="..\Modules\Inventario\Ginecologia.Modules.Inventario.csproj" />

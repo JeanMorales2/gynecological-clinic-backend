@@ -1,0 +1,6 @@
+using Ginecologia.Modules.ConsultaMedica.Application;
+using Ginecologia.Modules.ConsultaMedica.Domain;
+using Microsoft.EntityFrameworkCore;
+namespace Ginecologia.Modules.ConsultaMedica.Infrastructure;
+public sealed class ConsultaRepository(ConsultaMedicaDbContext db) : IConsultaRepository
+{ private IQueryable<Consulta> Detailed => db.Consultas.Include(x=>x.PrescriptionItems).Include(x=>x.Attachments); public Task<Consulta?> FindByIdAsync(Guid id,CancellationToken ct=default)=>Detailed.SingleOrDefaultAsync(x=>x.Id==id,ct); public Task<Consulta?> FindByAttachmentIdAsync(Guid attachmentId,CancellationToken ct=default)=>Detailed.SingleOrDefaultAsync(x=>x.Attachments.Any(a=>a.Id==attachmentId),ct); public async Task<PagedConsultaResult> ListAsync(Guid patientId,int page,int pageSize,CancellationToken ct=default) { var q=db.Consultas.AsNoTracking().Where(x=>x.PatientId==patientId);var total=await q.CountAsync(ct);var items=await q.OrderByDescending(x=>x.Fecha).Skip((page-1)*pageSize).Take(pageSize).Include(x=>x.PrescriptionItems).Include(x=>x.Attachments).ToListAsync(ct);return new(items.Select(ConsultaDto.From).ToList(),total,page,pageSize); } public Task AddAsync(Consulta c,CancellationToken ct=default)=>db.Consultas.AddAsync(c,ct).AsTask(); public Task SaveChangesAsync(CancellationToken ct=default)=>db.SaveChangesAsync(ct); }

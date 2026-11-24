@@ -63,6 +63,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Autorizacion", "Autorizacio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ginecologia.Modules.Autorizacion", "src\Modules\Autorizacion\Ginecologia.Modules.Autorizacion.csproj", "{0005D197-EFE6-4AA4-B168-A2ABEF188839}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsultaMedica", "ConsultaMedica", "{F2361985-0DA2-319F-3C14-3F7A143A75FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ginecologia.Modules.ConsultaMedica", "src\Modules\ConsultaMedica\Ginecologia.Modules.ConsultaMedica.csproj", "{4C77E94C-1D90-4565-8D30-8414A54EF6D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -241,6 +245,18 @@ Global
 		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Release|x64.Build.0 = Release|Any CPU
 		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Release|x86.ActiveCfg = Release|Any CPU
 		{0005D197-EFE6-4AA4-B168-A2ABEF188839}.Release|x86.Build.0 = Release|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Debug|x64.Build.0 = Debug|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Debug|x86.Build.0 = Debug|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Release|x64.ActiveCfg = Release|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Release|x64.Build.0 = Release|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Release|x86.ActiveCfg = Release|Any CPU
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -274,5 +290,7 @@ Global
 		{15A04B0D-8196-4B3B-851F-C0C10E5ABA8E} = {CC1826AC-5599-8CB5-975F-1B887EA8DDDE}
 		{A54273A7-C8F9-2DE9-32D2-044E17362875} = {CA253913-39DE-BFD0-C9A3-4B7EC6FBDF17}
 		{0005D197-EFE6-4AA4-B168-A2ABEF188839} = {A54273A7-C8F9-2DE9-32D2-044E17362875}
+		{F2361985-0DA2-319F-3C14-3F7A143A75FF} = {EC447DCF-ABFA-6E24-52A5-D7FD48A5C558}
+		{4C77E94C-1D90-4565-8D30-8414A54EF6D8} = {F2361985-0DA2-319F-3C14-3F7A143A75FF}
 	EndGlobalSection
 EndGlobal
