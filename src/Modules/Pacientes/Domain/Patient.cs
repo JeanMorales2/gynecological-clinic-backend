@@ -15,7 +15,12 @@ public sealed class Patient
         string? antecedentesRelevantes,
         string? enfermedadesCronicas,
         string? etsIts,
-        string? vicios)
+        string? vicios,
+        string? tipoSangre,
+        int? gestas,
+        int? partos,
+        int? cesareas,
+        int? abortos)
     {
         Id = id;
         NombreCompleto = RequiredName(nombreCompleto);
@@ -28,6 +33,11 @@ public sealed class Patient
         EnfermedadesCronicas = NormalizeOptional(enfermedadesCronicas);
         EtsIts = NormalizeOptional(etsIts);
         Vicios = NormalizeOptional(vicios);
+        TipoSangre = ValidBloodType(tipoSangre);
+        Gestas = ValidObstetricCount(gestas, nameof(gestas));
+        Partos = ValidObstetricCount(partos, nameof(partos));
+        Cesareas = ValidObstetricCount(cesareas, nameof(cesareas));
+        Abortos = ValidObstetricCount(abortos, nameof(abortos));
         Activo = true;
         CreatedAtUtc = DateTime.UtcNow;
     }
@@ -43,6 +53,11 @@ public sealed class Patient
     public string? EnfermedadesCronicas { get; private set; }
     public string? EtsIts { get; private set; }
     public string? Vicios { get; private set; }
+    public string? TipoSangre { get; private set; }
+    public int? Gestas { get; private set; }
+    public int? Partos { get; private set; }
+    public int? Cesareas { get; private set; }
+    public int? Abortos { get; private set; }
     public bool Activo { get; private set; }
     public DateTime CreatedAtUtc { get; private set; }
 
@@ -56,8 +71,13 @@ public sealed class Patient
         string? antecedentesRelevantes,
         string? enfermedadesCronicas,
         string? etsIts,
-        string? vicios) =>
-        new(Guid.NewGuid(), nombreCompleto, fechaNacimiento, telefono, email, documentoIdentidad, alergias, antecedentesRelevantes, enfermedadesCronicas, etsIts, vicios);
+        string? vicios,
+        string? tipoSangre = null,
+        int? gestas = null,
+        int? partos = null,
+        int? cesareas = null,
+        int? abortos = null) =>
+        new(Guid.NewGuid(), nombreCompleto, fechaNacimiento, telefono, email, documentoIdentidad, alergias, antecedentesRelevantes, enfermedadesCronicas, etsIts, vicios, tipoSangre, gestas, partos, cesareas, abortos);
 
     public void Update(
         string nombreCompleto,
@@ -69,7 +89,12 @@ public sealed class Patient
         string? antecedentesRelevantes,
         string? enfermedadesCronicas,
         string? etsIts,
-        string? vicios)
+        string? vicios,
+        string? tipoSangre = null,
+        int? gestas = null,
+        int? partos = null,
+        int? cesareas = null,
+        int? abortos = null)
     {
         NombreCompleto = RequiredName(nombreCompleto);
         FechaNacimiento = ValidBirthDate(fechaNacimiento);
@@ -81,6 +106,11 @@ public sealed class Patient
         EnfermedadesCronicas = NormalizeOptional(enfermedadesCronicas);
         EtsIts = NormalizeOptional(etsIts);
         Vicios = NormalizeOptional(vicios);
+        TipoSangre = ValidBloodType(tipoSangre);
+        Gestas = ValidObstetricCount(gestas, nameof(gestas));
+        Partos = ValidObstetricCount(partos, nameof(partos));
+        Cesareas = ValidObstetricCount(cesareas, nameof(cesareas));
+        Abortos = ValidObstetricCount(abortos, nameof(abortos));
     }
 
     public void Deactivate() => Activo = false;
@@ -108,4 +138,21 @@ public sealed class Patient
     }
 
     private static string? NormalizeOptional(string? value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+
+    private static readonly string[] ValidBloodTypes = { "O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-" };
+
+    private static string? ValidBloodType(string? value)
+    {
+        var normalized = NormalizeOptional(value);
+        if (normalized is null) return null;
+        if (!ValidBloodTypes.Contains(normalized)) throw new ArgumentException("El tipo de sangre no es válido.", nameof(value));
+        return normalized;
+    }
+
+    private static int? ValidObstetricCount(int? value, string paramName)
+    {
+        if (value is null) return null;
+        if (value < 0) throw new ArgumentException("El valor de la fórmula obstétrica no puede ser negativo.", paramName);
+        return value;
+    }
 }

@@ -25,6 +25,11 @@ public sealed class PacientesDbContext(DbContextOptions<PacientesDbContext> opti
         patient.Property(x => x.EnfermedadesCronicas).HasColumnName("enfermedades_cronicas").HasMaxLength(4000);
         patient.Property(x => x.EtsIts).HasColumnName("ets_its").HasMaxLength(4000);
         patient.Property(x => x.Vicios).HasColumnName("vicios").HasMaxLength(2000);
+        patient.Property(x => x.TipoSangre).HasColumnName("tipo_sangre").HasMaxLength(5);
+        patient.Property(x => x.Gestas).HasColumnName("gestas");
+        patient.Property(x => x.Partos).HasColumnName("partos");
+        patient.Property(x => x.Cesareas).HasColumnName("cesareas");
+        patient.Property(x => x.Abortos).HasColumnName("abortos");
         patient.Property(x => x.Activo).HasColumnName("activo").IsRequired();
         patient.Property(x => x.CreatedAtUtc).HasColumnName("created_at_utc").IsRequired();
         patient.HasIndex(x => x.NombreCompleto).HasDatabaseName("ix_patients_nombre_completo");

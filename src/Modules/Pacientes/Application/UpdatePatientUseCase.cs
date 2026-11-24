@@ -15,7 +15,12 @@ public sealed class UpdatePatientUseCase(IPatientRepository patients)
             command.AntecedentesRelevantes,
             command.EnfermedadesCronicas,
             command.EtsIts,
-            command.Vicios);
+            command.Vicios,
+            command.TipoSangre,
+            command.Gestas,
+            command.Partos,
+            command.Cesareas,
+            command.Abortos);
         await patients.SaveChangesAsync(cancellationToken);
         return PatientDto.From(patient);
     }

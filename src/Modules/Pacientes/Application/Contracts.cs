@@ -33,6 +33,11 @@ public sealed record PatientDto(
     string? EnfermedadesCronicas,
     string? EtsIts,
     string? Vicios,
+    string? TipoSangre,
+    int? Gestas,
+    int? Partos,
+    int? Cesareas,
+    int? Abortos,
     bool Activo,
     DateTime CreatedAtUtc)
 {
@@ -48,6 +53,11 @@ public sealed record PatientDto(
         patient.EnfermedadesCronicas,
         patient.EtsIts,
         patient.Vicios,
+        patient.TipoSangre,
+        patient.Gestas,
+        patient.Partos,
+        patient.Cesareas,
+        patient.Abortos,
         patient.Activo,
         patient.CreatedAtUtc);
 }
@@ -62,7 +72,12 @@ public sealed record CreatePatientCommand(
     string? AntecedentesRelevantes,
     string? EnfermedadesCronicas,
     string? EtsIts,
-    string? Vicios);
+    string? Vicios,
+    string? TipoSangre = null,
+    int? Gestas = null,
+    int? Partos = null,
+    int? Cesareas = null,
+    int? Abortos = null);
 
 public sealed record UpdatePatientCommand(
     string NombreCompleto,
@@ -74,7 +89,12 @@ public sealed record UpdatePatientCommand(
     string? AntecedentesRelevantes,
     string? EnfermedadesCronicas,
     string? EtsIts,
-    string? Vicios);
+    string? Vicios,
+    string? TipoSangre = null,
+    int? Gestas = null,
+    int? Partos = null,
+    int? Cesareas = null,
+    int? Abortos = null);
 
 public sealed record FamilyMedicalHistoryDto(Guid Id, Guid PatientId, string Condicion, string Parentesco, DateTime CreatedAtUtc)
 {

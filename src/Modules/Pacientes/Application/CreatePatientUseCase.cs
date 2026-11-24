@@ -16,7 +16,12 @@ public sealed class CreatePatientUseCase(IPatientRepository patients)
             command.AntecedentesRelevantes,
             command.EnfermedadesCronicas,
             command.EtsIts,
-            command.Vicios);
+            command.Vicios,
+            command.TipoSangre,
+            command.Gestas,
+            command.Partos,
+            command.Cesareas,
+            command.Abortos);
         await patients.AddAsync(patient, cancellationToken);
         await patients.SaveChangesAsync(cancellationToken);
         return PatientDto.From(patient);

@@ -65,6 +65,10 @@ namespace Ginecologia.Modules.Pacientes.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<int?>("Abortos")
+                        .HasColumnType("integer")
+                        .HasColumnName("abortos");
+
                     b.Property<bool>("Activo")
                         .HasColumnType("boolean")
                         .HasColumnName("activo");
@@ -78,6 +82,10 @@ namespace Ginecologia.Modules.Pacientes.Infrastructure.Migrations
                         .HasMaxLength(8000)
                         .HasColumnType("character varying(8000)")
                         .HasColumnName("antecedentes_relevantes");
+
+                    b.Property<int?>("Cesareas")
+                        .HasColumnType("integer")
+                        .HasColumnName("cesareas");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone")
@@ -107,17 +115,30 @@ namespace Ginecologia.Modules.Pacientes.Infrastructure.Migrations
                         .HasColumnType("date")
                         .HasColumnName("fecha_nacimiento");
 
+                    b.Property<int?>("Gestas")
+                        .HasColumnType("integer")
+                        .HasColumnName("gestas");
+
                     b.Property<string>("NombreCompleto")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
                         .HasColumnName("nombre_completo");
 
+                    b.Property<int?>("Partos")
+                        .HasColumnType("integer")
+                        .HasColumnName("partos");
+
                     b.Property<string>("Telefono")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("telefono");
+
+                    b.Property<string>("TipoSangre")
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)")
+                        .HasColumnName("tipo_sangre");
 
                     b.Property<string>("Vicios")
                         .HasMaxLength(2000)
