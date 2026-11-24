@@ -3,9 +3,11 @@ using Ginecologia.Modules.Notificaciones.Domain;
 
 namespace Ginecologia.Modules.Prospeccion.Application;
 
+public sealed record InviteProspectResult(ProspectDto Prospect, bool EmailEnviado, string? ErrorEnvio);
+
 public sealed class InviteProspectUseCase(IProspectRepository prospects, SendEmailNotificationUseCase sendEmailNotification)
 {
-    public async Task<ProspectDto> ExecuteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<InviteProspectResult> ExecuteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var prospect = await prospects.FindByIdAsync(id, cancellationToken) ?? throw new ProspectNotFoundException(id);
         if (string.IsNullOrWhiteSpace(prospect.Email))
@@ -17,8 +19,9 @@ public sealed class InviteProspectUseCase(IProspectRepository prospects, SendEma
             $"Hola {prospect.NombreCompleto}, te invitamos a agendar tu primera consulta con nosotros. Responde este correo para coordinar.",
             cancellationToken);
 
-        if (notification.Estado == EmailNotificationStatus.Enviado) prospect.MarcarContactado();
+        var enviado = notification.Estado == EmailNotificationStatus.Enviado;
+        if (enviado) prospect.MarcarContactado();
         await prospects.SaveChangesAsync(cancellationToken);
-        return ProspectDto.From(prospect);
+        return new InviteProspectResult(ProspectDto.From(prospect), enviado, enviado ? null : notification.UltimoError);
     }
 }

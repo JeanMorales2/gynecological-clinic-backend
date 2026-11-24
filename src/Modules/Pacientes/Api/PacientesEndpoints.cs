@@ -19,6 +19,7 @@ public static class PacientesEndpoints
         pacientes.MapPost("/", CreateAsync);
         pacientes.MapPut("/{id:guid}", UpdateAsync);
         pacientes.MapPost("/{id:guid}/desactivar", DeactivateAsync);
+        pacientes.MapPost("/{id:guid}/reactivar", ReactivateAsync);
         var antecedentesFamiliares = pacientes.MapGroup("/{patientId:guid}/antecedentes-familiares");
         antecedentesFamiliares.MapGet("/", ListFamilyMedicalHistoryAsync);
         antecedentesFamiliares.MapPost("/", AddFamilyMedicalHistoryAsync);
@@ -57,6 +58,12 @@ public static class PacientesEndpoints
     }
 
     private static async Task<IResult> DeactivateAsync(Guid id, DeactivatePatientUseCase useCase, CancellationToken cancellationToken)
+    {
+        try { return Results.Ok(await useCase.ExecuteAsync(id, cancellationToken)); }
+        catch (PatientNotFoundException) { return Results.NotFound(); }
+    }
+
+    private static async Task<IResult> ReactivateAsync(Guid id, ReactivatePatientUseCase useCase, CancellationToken cancellationToken)
     {
         try { return Results.Ok(await useCase.ExecuteAsync(id, cancellationToken)); }
         catch (PatientNotFoundException) { return Results.NotFound(); }

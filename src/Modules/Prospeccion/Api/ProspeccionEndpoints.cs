@@ -74,8 +74,8 @@ public static class ProspeccionEndpoints
     {
         try
         {
-            var prospect = await useCase.ExecuteAsync(id, cancellationToken);
-            return Results.Ok(prospect);
+            var result = await useCase.ExecuteAsync(id, cancellationToken);
+            return Results.Ok(result);
         }
         catch (ProspectNotFoundException) { return Results.NotFound(); }
         catch (ArgumentException exception) { return Results.BadRequest(new { message = exception.Message }); }

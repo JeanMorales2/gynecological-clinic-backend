@@ -85,6 +85,8 @@ public sealed class Patient
 
     public void Deactivate() => Activo = false;
 
+    public void Activate() => Activo = true;
+
     private static string RequiredName(string value)
     {
         var normalized = value?.Trim();
