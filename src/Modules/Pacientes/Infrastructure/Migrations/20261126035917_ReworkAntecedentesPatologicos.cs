@@ -11,6 +11,25 @@ namespace Ginecologia.Modules.Pacientes.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Antes de tirar estas 3 columnas, se fusiona cualquier dato real que tengan dentro de
+            // antecedentes_relevantes (que en este mismo Up() se renombra a antecedentes_patologicos_personales),
+            // etiquetado por campo de origen. Nunca se pierde informacion clinica existente silenciosamente;
+            // LEFT(...,8000) es solo una salvaguarda defensiva para no exceder el limite de la columna
+            // en el caso extremo de que los 4 campos esten simultaneamente cerca de su longitud maxima.
+            migrationBuilder.Sql("""
+                UPDATE pacientes.patients
+                SET antecedentes_relevantes = LEFT(
+                    TRIM(BOTH E'\n' FROM
+                        COALESCE(antecedentes_relevantes, '') ||
+                        CASE WHEN enfermedades_cronicas IS NOT NULL AND enfermedades_cronicas <> '' THEN E'\nEnfermedades cronicas: ' || enfermedades_cronicas ELSE '' END ||
+                        CASE WHEN ets_its IS NOT NULL AND ets_its <> '' THEN E'\nETS/ITS: ' || ets_its ELSE '' END ||
+                        CASE WHEN vicios IS NOT NULL AND vicios <> '' THEN E'\nVicios: ' || vicios ELSE '' END
+                    ), 8000)
+                WHERE (enfermedades_cronicas IS NOT NULL AND enfermedades_cronicas <> '')
+                   OR (ets_its IS NOT NULL AND ets_its <> '')
+                   OR (vicios IS NOT NULL AND vicios <> '');
+                """);
+
             migrationBuilder.DropColumn(
                 name: "enfermedades_cronicas",
                 schema: "pacientes",
