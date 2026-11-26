@@ -11,13 +11,13 @@ public interface IClinicalEntryRepository
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 
-public sealed record CreateClinicalEntryCommand(Guid PatientId, ClinicalEntryType Tipo, DateOnly Fecha, string Motivo, string Hallazgos, string? Diagnostico, string? Indicaciones, string? Tratamiento, string? Medicamentos, string? Examenes, decimal? PesoKg, decimal? AlturaCm, Guid RegistradoPorId);
-public sealed record UpdateClinicalEntryCommand(ClinicalEntryType Tipo, DateOnly Fecha, string Motivo, string Hallazgos, string? Diagnostico, string? Indicaciones, string? Tratamiento, string? Medicamentos, string? Examenes, decimal? PesoKg, decimal? AlturaCm);
+public sealed record CreateClinicalEntryCommand(Guid PatientId, ClinicalEntryType Tipo, DateOnly Fecha, string Motivo, string Hallazgos, string? Diagnostico, string? Indicaciones, string? Tratamiento, string? Medicamentos, string? Examenes, decimal? PesoKg, decimal? AlturaCm, DateOnly? CitaSeguimiento, Guid RegistradoPorId);
+public sealed record UpdateClinicalEntryCommand(ClinicalEntryType Tipo, DateOnly Fecha, string Motivo, string Hallazgos, string? Diagnostico, string? Indicaciones, string? Tratamiento, string? Medicamentos, string? Examenes, decimal? PesoKg, decimal? AlturaCm, DateOnly? CitaSeguimiento);
 public sealed record ClinicalEntryListQuery(Guid PatientId, ClinicalEntryType? Tipo, int Page, int PageSize);
 public sealed record PagedClinicalEntryResult<T>(IReadOnlyList<T> Items, int TotalCount, int Page, int PageSize);
-public sealed record ClinicalEntryDto(Guid Id, Guid PatientId, ClinicalEntryType Tipo, DateOnly Fecha, string Motivo, string Hallazgos, string? Diagnostico, string? Indicaciones, string? Tratamiento, string? Medicamentos, string? Examenes, decimal? PesoKg, decimal? AlturaCm, Guid RegistradoPorId, DateTime CreatedAtUtc)
+public sealed record ClinicalEntryDto(Guid Id, Guid PatientId, ClinicalEntryType Tipo, DateOnly Fecha, string Motivo, string Hallazgos, string? Diagnostico, string? Indicaciones, string? Tratamiento, string? Medicamentos, string? Examenes, decimal? PesoKg, decimal? AlturaCm, DateOnly? CitaSeguimiento, Guid RegistradoPorId, DateTime CreatedAtUtc)
 {
-    public static ClinicalEntryDto From(ClinicalEntry entry) => new(entry.Id, entry.PatientId, entry.Tipo, entry.Fecha, entry.Motivo, entry.Hallazgos, entry.Diagnostico, entry.Indicaciones, entry.Tratamiento, entry.Medicamentos, entry.Examenes, entry.PesoKg, entry.AlturaCm, entry.RegistradoPorId, entry.CreatedAtUtc);
+    public static ClinicalEntryDto From(ClinicalEntry entry) => new(entry.Id, entry.PatientId, entry.Tipo, entry.Fecha, entry.Motivo, entry.Hallazgos, entry.Diagnostico, entry.Indicaciones, entry.Tratamiento, entry.Medicamentos, entry.Examenes, entry.PesoKg, entry.AlturaCm, entry.CitaSeguimiento, entry.RegistradoPorId, entry.CreatedAtUtc);
 }
 
 public sealed class ClinicalEntryNotFoundException(Guid id) : KeyNotFoundException($"No existe la entrada clínica {id}.");

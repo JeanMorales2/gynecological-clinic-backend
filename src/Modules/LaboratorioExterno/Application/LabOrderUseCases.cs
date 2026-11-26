@@ -23,7 +23,7 @@ public sealed class MarkLabOrderReceivedUseCase(ILabOrderRepository orders, Crea
         order.MarkReceived(resultadoResumen, observaciones);
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
         await orders.SaveChangesAsync(cancellationToken);
-        await createClinicalEntry.ExecuteAsync(new CreateClinicalEntryCommand(order.PatientId, ClinicalEntryType.Laboratorio, order.FechaResultado!.Value, order.TipoEstudio, order.ResultadoResumen!, null, order.Observaciones, null, null, null, null, null, order.SolicitadoPorId), cancellationToken);
+        await createClinicalEntry.ExecuteAsync(new CreateClinicalEntryCommand(order.PatientId, ClinicalEntryType.Laboratorio, order.FechaResultado!.Value, order.TipoEstudio, order.ResultadoResumen!, null, order.Observaciones, null, null, null, null, null, null, order.SolicitadoPorId), cancellationToken);
         transaction.Complete();
         return LabOrderDto.From(order);
     }

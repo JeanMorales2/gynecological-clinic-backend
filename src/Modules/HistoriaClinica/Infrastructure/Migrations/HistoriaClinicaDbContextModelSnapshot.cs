@@ -34,6 +34,10 @@ namespace Ginecologia.Modules.HistoriaClinica.Infrastructure.Migrations
                         .HasColumnType("numeric(5,1)")
                         .HasColumnName("altura_cm");
 
+                    b.Property<DateOnly?>("CitaSeguimiento")
+                        .HasColumnType("date")
+                        .HasColumnName("cita_seguimiento");
+
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at_utc");

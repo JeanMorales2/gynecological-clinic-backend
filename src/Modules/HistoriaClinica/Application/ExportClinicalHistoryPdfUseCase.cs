@@ -48,10 +48,16 @@ public sealed class ExportClinicalHistoryPdfUseCase(IClinicalEntryRepository ent
                         text.Span("\nTel\u00e9fono: ").SemiBold(); text.Span(patient.Telefono);
                         if (!string.IsNullOrWhiteSpace(patient.DocumentoIdentidad)) { text.Span("\nDocumento de identidad: ").SemiBold(); text.Span(patient.DocumentoIdentidad); }
                         if (!string.IsNullOrWhiteSpace(patient.Alergias)) { text.Span("\nAlergias: ").SemiBold(); text.Span(patient.Alergias); }
-                        if (!string.IsNullOrWhiteSpace(patient.AntecedentesRelevantes)) { text.Span("\nAntecedentes relevantes: ").SemiBold(); text.Span(patient.AntecedentesRelevantes); }
-                        if (!string.IsNullOrWhiteSpace(patient.EnfermedadesCronicas)) { text.Span("\nEnfermedades crónicas: ").SemiBold(); text.Span(patient.EnfermedadesCronicas); }
-                        if (!string.IsNullOrWhiteSpace(patient.EtsIts)) { text.Span("\nETS/ITS: ").SemiBold(); text.Span(patient.EtsIts); }
-                        if (!string.IsNullOrWhiteSpace(patient.Vicios)) { text.Span("\nVicios: ").SemiBold(); text.Span(patient.Vicios); }
+                        if (!string.IsNullOrWhiteSpace(patient.AntecedentesPatologicosPersonales)) { text.Span("\nAntecedentes patológicos personales: ").SemiBold(); text.Span(patient.AntecedentesPatologicosPersonales); }
+                        if (!string.IsNullOrWhiteSpace(patient.AntecedentesPatologicosFamiliares)) { text.Span("\nAntecedentes patológicos familiares: ").SemiBold(); text.Span(patient.AntecedentesPatologicosFamiliares); }
+                        if (!string.IsNullOrWhiteSpace(patient.AntecedentesQuirurgicos)) { text.Span("\nAntecedentes quirúrgicos: ").SemiBold(); text.Span(patient.AntecedentesQuirurgicos); }
+                        if (!string.IsNullOrWhiteSpace(patient.Menarca)) { text.Span("\nMenarca: ").SemiBold(); text.Span(patient.Menarca); }
+                        if (!string.IsNullOrWhiteSpace(patient.Ciclos)) { text.Span("\nCiclos: ").SemiBold(); text.Span(patient.Ciclos); }
+                        if (!string.IsNullOrWhiteSpace(patient.Ivsa)) { text.Span("\nIVSA: ").SemiBold(); text.Span(patient.Ivsa); }
+                        if (patient.Fum is not null) { text.Span("\nFUM: ").SemiBold(); text.Span(patient.Fum.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)); }
+                        if (!string.IsNullOrWhiteSpace(patient.Mpf)) { text.Span("\nMPF: ").SemiBold(); text.Span(patient.Mpf); }
+                        if (!string.IsNullOrWhiteSpace(patient.Pap)) { text.Span("\nPAP: ").SemiBold(); text.Span(patient.Pap); }
+                        if (!string.IsNullOrWhiteSpace(patient.Complicaciones)) { text.Span("\nComplicaciones: ").SemiBold(); text.Span(patient.Complicaciones); }
                     });
                     if (familyMedicalHistories.Count > 0)
                     {
@@ -82,6 +88,7 @@ public sealed class ExportClinicalHistoryPdfUseCase(IClinicalEntryRepository ent
                             }
                             if (!string.IsNullOrWhiteSpace(entry.Diagnostico)) EntryLine(entryColumn, "Diagn\u00f3stico", entry.Diagnostico);
                             if (!string.IsNullOrWhiteSpace(entry.Indicaciones)) EntryLine(entryColumn, "Indicaciones", entry.Indicaciones);
+                            if (entry.CitaSeguimiento is not null) EntryLine(entryColumn, "Cita de seguimiento", entry.CitaSeguimiento.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
                         });
                     }
                 });

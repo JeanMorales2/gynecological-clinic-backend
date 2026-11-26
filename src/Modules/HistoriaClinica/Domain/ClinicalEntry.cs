@@ -13,7 +13,7 @@ public sealed class ClinicalEntry
 {
     private ClinicalEntry() { }
 
-    private ClinicalEntry(Guid id, Guid patientId, ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, string? tratamiento, string? medicamentos, string? examenes, decimal? pesoKg, decimal? alturaCm, Guid registradoPorId)
+    private ClinicalEntry(Guid id, Guid patientId, ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, string? tratamiento, string? medicamentos, string? examenes, decimal? pesoKg, decimal? alturaCm, DateOnly? citaSeguimiento, Guid registradoPorId)
     {
         Id = id;
         PatientId = RequiredId(patientId, nameof(patientId));
@@ -28,6 +28,7 @@ public sealed class ClinicalEntry
         Examenes = OptionalText(examenes, 4000);
         PesoKg = ValidMeasurement(pesoKg, nameof(pesoKg));
         AlturaCm = ValidMeasurement(alturaCm, nameof(alturaCm));
+        CitaSeguimiento = citaSeguimiento;
         RegistradoPorId = RequiredId(registradoPorId, nameof(registradoPorId));
         CreatedAtUtc = DateTime.UtcNow;
     }
@@ -45,14 +46,15 @@ public sealed class ClinicalEntry
     public string? Examenes { get; private set; }
     public decimal? PesoKg { get; private set; }
     public decimal? AlturaCm { get; private set; }
+    public DateOnly? CitaSeguimiento { get; private set; }
     public Guid RegistradoPorId { get; private set; }
     public DateTime CreatedAtUtc { get; private set; }
 
-    public static ClinicalEntry Create(Guid patientId, ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, string? tratamiento, string? medicamentos, string? examenes, decimal? pesoKg, decimal? alturaCm, Guid registradoPorId) =>
-        new(Guid.NewGuid(), patientId, tipo, fecha, motivo, hallazgos, diagnostico, indicaciones, tratamiento, medicamentos, examenes, pesoKg, alturaCm, registradoPorId);
+    public static ClinicalEntry Create(Guid patientId, ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, string? tratamiento, string? medicamentos, string? examenes, decimal? pesoKg, decimal? alturaCm, DateOnly? citaSeguimiento, Guid registradoPorId) =>
+        new(Guid.NewGuid(), patientId, tipo, fecha, motivo, hallazgos, diagnostico, indicaciones, tratamiento, medicamentos, examenes, pesoKg, alturaCm, citaSeguimiento, registradoPorId);
 
     // Clinical records are never deleted. Updates are limited to correcting data-entry errors.
-    public void Update(ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, string? tratamiento, string? medicamentos, string? examenes, decimal? pesoKg, decimal? alturaCm)
+    public void Update(ClinicalEntryType tipo, DateOnly fecha, string motivo, string hallazgos, string? diagnostico, string? indicaciones, string? tratamiento, string? medicamentos, string? examenes, decimal? pesoKg, decimal? alturaCm, DateOnly? citaSeguimiento)
     {
         Tipo = tipo;
         Fecha = fecha;
@@ -65,6 +67,7 @@ public sealed class ClinicalEntry
         Examenes = OptionalText(examenes, 4000);
         PesoKg = ValidMeasurement(pesoKg, nameof(pesoKg));
         AlturaCm = ValidMeasurement(alturaCm, nameof(alturaCm));
+        CitaSeguimiento = citaSeguimiento;
     }
 
     private static decimal? ValidMeasurement(decimal? value, string parameterName)

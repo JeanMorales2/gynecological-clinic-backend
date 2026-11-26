@@ -26,6 +26,7 @@ public sealed class HistoriaClinicaDbContext(DbContextOptions<HistoriaClinicaDbC
         entry.Property(x => x.Examenes).HasColumnName("examenes").HasMaxLength(4000);
         entry.Property(x => x.PesoKg).HasColumnName("peso_kg").HasColumnType("numeric(5,2)");
         entry.Property(x => x.AlturaCm).HasColumnName("altura_cm").HasColumnType("numeric(5,1)");
+        entry.Property(x => x.CitaSeguimiento).HasColumnName("cita_seguimiento").HasColumnType("date");
         entry.Property(x => x.RegistradoPorId).HasColumnName("registrado_por_id").IsRequired();
         entry.Property(x => x.CreatedAtUtc).HasColumnName("created_at_utc").HasColumnType("timestamp with time zone").IsRequired();
         entry.HasIndex(x => new { x.PatientId, x.Fecha }).HasDatabaseName("ix_entries_patient_fecha");
