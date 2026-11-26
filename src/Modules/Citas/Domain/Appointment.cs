@@ -77,6 +77,8 @@ public sealed class Appointment
     {
         if (value.Kind != DateTimeKind.Utc)
             throw new ArgumentException("La fecha y hora de inicio debe estar expresada en UTC.", nameof(value));
+        if (value < DateTime.UtcNow)
+            throw new ArgumentException("No se puede agendar una cita en el pasado.", nameof(value));
         return value;
     }
 
