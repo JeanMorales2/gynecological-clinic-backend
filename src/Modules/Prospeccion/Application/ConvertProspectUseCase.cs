@@ -25,8 +25,7 @@ public sealed class ConvertProspectUseCase(IProspectRepository prospects, Create
             prospect.Email,
             command.DocumentoIdentidad,
             command.Alergias,
-            command.AntecedentesRelevantes,
-            null,
+            command.AntecedentesPatologicosPersonales,
             null,
             null), cancellationToken);
 

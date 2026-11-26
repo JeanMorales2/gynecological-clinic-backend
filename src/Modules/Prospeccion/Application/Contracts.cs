@@ -37,7 +37,7 @@ public sealed record ProspectDto(
 
 public sealed record CreateProspectCommand(string NombreCompleto, string Telefono, string? TelefonoAlternativo, string? Email, string? Fuente, string? Notas);
 public sealed record UpdateProspectCommand(string NombreCompleto, string Telefono, string? TelefonoAlternativo, string? Email, string? Fuente, ProspectStatus Estado, string? Notas);
-public sealed record ConvertProspectCommand(DateOnly FechaNacimiento, string? DocumentoIdentidad, string? Alergias, string? AntecedentesRelevantes);
+public sealed record ConvertProspectCommand(DateOnly FechaNacimiento, string? DocumentoIdentidad, string? Alergias, string? AntecedentesPatologicosPersonales);
 public sealed record ProspectListQuery(string? Search, ProspectStatus? Estado, int Page, int PageSize);
 public sealed record PagedProspectResult<T>(IReadOnlyList<T> Items, int TotalCount, int Page, int PageSize);
 

@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Ginecologia.Modules.Pacientes.Api;
 
-public sealed record CreatePatientRequest(string NombreCompleto, DateOnly FechaNacimiento, string Telefono, string? Email, string? DocumentoIdentidad, string? Alergias, string? AntecedentesRelevantes, string? EnfermedadesCronicas, string? EtsIts, string? Vicios, string? TipoSangre, int? Gestas, int? Partos, int? Cesareas, int? Abortos);
-public sealed record UpdatePatientRequest(string NombreCompleto, DateOnly FechaNacimiento, string Telefono, string? Email, string? DocumentoIdentidad, string? Alergias, string? AntecedentesRelevantes, string? EnfermedadesCronicas, string? EtsIts, string? Vicios, string? TipoSangre, int? Gestas, int? Partos, int? Cesareas, int? Abortos);
+public sealed record CreatePatientRequest(string NombreCompleto, DateOnly FechaNacimiento, string Telefono, string? Email, string? DocumentoIdentidad, string? Alergias, string? AntecedentesPatologicosPersonales, string? AntecedentesPatologicosFamiliares, string? AntecedentesQuirurgicos, string? Menarca, string? Ciclos, string? Ivsa, DateOnly? Fum, string? Mpf, string? Pap, string? Complicaciones, string? TipoSangre, int? Gestas, int? Partos, int? Cesareas, int? Abortos);
+public sealed record UpdatePatientRequest(string NombreCompleto, DateOnly FechaNacimiento, string Telefono, string? Email, string? DocumentoIdentidad, string? Alergias, string? AntecedentesPatologicosPersonales, string? AntecedentesPatologicosFamiliares, string? AntecedentesQuirurgicos, string? Menarca, string? Ciclos, string? Ivsa, DateOnly? Fum, string? Mpf, string? Pap, string? Complicaciones, string? TipoSangre, int? Gestas, int? Partos, int? Cesareas, int? Abortos);
 public sealed record AddFamilyMedicalHistoryRequest(string Condicion, string Parentesco);
 
 public static class PacientesEndpoints
@@ -40,7 +40,7 @@ public static class PacientesEndpoints
     {
         try
         {
-            var patient = await useCase.ExecuteAsync(new CreatePatientCommand(request.NombreCompleto, request.FechaNacimiento, request.Telefono, request.Email, request.DocumentoIdentidad, request.Alergias, request.AntecedentesRelevantes, request.EnfermedadesCronicas, request.EtsIts, request.Vicios, request.TipoSangre, request.Gestas, request.Partos, request.Cesareas, request.Abortos), cancellationToken);
+            var patient = await useCase.ExecuteAsync(new CreatePatientCommand(request.NombreCompleto, request.FechaNacimiento, request.Telefono, request.Email, request.DocumentoIdentidad, request.Alergias, request.AntecedentesPatologicosPersonales, request.AntecedentesPatologicosFamiliares, request.AntecedentesQuirurgicos, request.Menarca, request.Ciclos, request.Ivsa, request.Fum, request.Mpf, request.Pap, request.Complicaciones, request.TipoSangre, request.Gestas, request.Partos, request.Cesareas, request.Abortos), cancellationToken);
             return Results.Created($"/api/pacientes/{patient.Id}", patient);
         }
         catch (ArgumentException exception) { return Results.BadRequest(new { message = exception.Message }); }
@@ -50,7 +50,7 @@ public static class PacientesEndpoints
     {
         try
         {
-            var patient = await useCase.ExecuteAsync(id, new UpdatePatientCommand(request.NombreCompleto, request.FechaNacimiento, request.Telefono, request.Email, request.DocumentoIdentidad, request.Alergias, request.AntecedentesRelevantes, request.EnfermedadesCronicas, request.EtsIts, request.Vicios, request.TipoSangre, request.Gestas, request.Partos, request.Cesareas, request.Abortos), cancellationToken);
+            var patient = await useCase.ExecuteAsync(id, new UpdatePatientCommand(request.NombreCompleto, request.FechaNacimiento, request.Telefono, request.Email, request.DocumentoIdentidad, request.Alergias, request.AntecedentesPatologicosPersonales, request.AntecedentesPatologicosFamiliares, request.AntecedentesQuirurgicos, request.Menarca, request.Ciclos, request.Ivsa, request.Fum, request.Mpf, request.Pap, request.Complicaciones, request.TipoSangre, request.Gestas, request.Partos, request.Cesareas, request.Abortos), cancellationToken);
             return Results.Ok(patient);
         }
         catch (PatientNotFoundException) { return Results.NotFound(); }

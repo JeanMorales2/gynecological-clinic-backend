@@ -12,10 +12,16 @@ public sealed class Patient
         string? email,
         string? documentoIdentidad,
         string? alergias,
-        string? antecedentesRelevantes,
-        string? enfermedadesCronicas,
-        string? etsIts,
-        string? vicios,
+        string? antecedentesPatologicosPersonales,
+        string? antecedentesPatologicosFamiliares,
+        string? antecedentesQuirurgicos,
+        string? menarca,
+        string? ciclos,
+        string? ivsa,
+        DateOnly? fum,
+        string? mpf,
+        string? pap,
+        string? complicaciones,
         string? tipoSangre,
         int? gestas,
         int? partos,
@@ -29,10 +35,16 @@ public sealed class Patient
         Email = NormalizeOptional(email);
         DocumentoIdentidad = NormalizeOptional(documentoIdentidad);
         Alergias = NormalizeOptional(alergias);
-        AntecedentesRelevantes = NormalizeOptional(antecedentesRelevantes);
-        EnfermedadesCronicas = NormalizeOptional(enfermedadesCronicas);
-        EtsIts = NormalizeOptional(etsIts);
-        Vicios = NormalizeOptional(vicios);
+        AntecedentesPatologicosPersonales = NormalizeOptional(antecedentesPatologicosPersonales);
+        AntecedentesPatologicosFamiliares = NormalizeOptional(antecedentesPatologicosFamiliares);
+        AntecedentesQuirurgicos = NormalizeOptional(antecedentesQuirurgicos);
+        Menarca = NormalizeOptional(menarca);
+        Ciclos = NormalizeOptional(ciclos);
+        Ivsa = NormalizeOptional(ivsa);
+        Fum = fum;
+        Mpf = NormalizeOptional(mpf);
+        Pap = NormalizeOptional(pap);
+        Complicaciones = NormalizeOptional(complicaciones);
         TipoSangre = ValidBloodType(tipoSangre);
         Gestas = ValidObstetricCount(gestas, nameof(gestas));
         Partos = ValidObstetricCount(partos, nameof(partos));
@@ -49,10 +61,16 @@ public sealed class Patient
     public string? Email { get; private set; }
     public string? DocumentoIdentidad { get; private set; }
     public string? Alergias { get; private set; }
-    public string? AntecedentesRelevantes { get; private set; }
-    public string? EnfermedadesCronicas { get; private set; }
-    public string? EtsIts { get; private set; }
-    public string? Vicios { get; private set; }
+    public string? AntecedentesPatologicosPersonales { get; private set; }
+    public string? AntecedentesPatologicosFamiliares { get; private set; }
+    public string? AntecedentesQuirurgicos { get; private set; }
+    public string? Menarca { get; private set; }
+    public string? Ciclos { get; private set; }
+    public string? Ivsa { get; private set; }
+    public DateOnly? Fum { get; private set; }
+    public string? Mpf { get; private set; }
+    public string? Pap { get; private set; }
+    public string? Complicaciones { get; private set; }
     public string? TipoSangre { get; private set; }
     public int? Gestas { get; private set; }
     public int? Partos { get; private set; }
@@ -68,16 +86,22 @@ public sealed class Patient
         string? email,
         string? documentoIdentidad,
         string? alergias,
-        string? antecedentesRelevantes,
-        string? enfermedadesCronicas,
-        string? etsIts,
-        string? vicios,
+        string? antecedentesPatologicosPersonales,
+        string? antecedentesPatologicosFamiliares,
+        string? antecedentesQuirurgicos,
+        string? menarca = null,
+        string? ciclos = null,
+        string? ivsa = null,
+        DateOnly? fum = null,
+        string? mpf = null,
+        string? pap = null,
+        string? complicaciones = null,
         string? tipoSangre = null,
         int? gestas = null,
         int? partos = null,
         int? cesareas = null,
         int? abortos = null) =>
-        new(Guid.NewGuid(), nombreCompleto, fechaNacimiento, telefono, email, documentoIdentidad, alergias, antecedentesRelevantes, enfermedadesCronicas, etsIts, vicios, tipoSangre, gestas, partos, cesareas, abortos);
+        new(Guid.NewGuid(), nombreCompleto, fechaNacimiento, telefono, email, documentoIdentidad, alergias, antecedentesPatologicosPersonales, antecedentesPatologicosFamiliares, antecedentesQuirurgicos, menarca, ciclos, ivsa, fum, mpf, pap, complicaciones, tipoSangre, gestas, partos, cesareas, abortos);
 
     public void Update(
         string nombreCompleto,
@@ -86,10 +110,16 @@ public sealed class Patient
         string? email,
         string? documentoIdentidad,
         string? alergias,
-        string? antecedentesRelevantes,
-        string? enfermedadesCronicas,
-        string? etsIts,
-        string? vicios,
+        string? antecedentesPatologicosPersonales,
+        string? antecedentesPatologicosFamiliares,
+        string? antecedentesQuirurgicos,
+        string? menarca = null,
+        string? ciclos = null,
+        string? ivsa = null,
+        DateOnly? fum = null,
+        string? mpf = null,
+        string? pap = null,
+        string? complicaciones = null,
         string? tipoSangre = null,
         int? gestas = null,
         int? partos = null,
@@ -102,10 +132,16 @@ public sealed class Patient
         Email = NormalizeOptional(email);
         DocumentoIdentidad = NormalizeOptional(documentoIdentidad);
         Alergias = NormalizeOptional(alergias);
-        AntecedentesRelevantes = NormalizeOptional(antecedentesRelevantes);
-        EnfermedadesCronicas = NormalizeOptional(enfermedadesCronicas);
-        EtsIts = NormalizeOptional(etsIts);
-        Vicios = NormalizeOptional(vicios);
+        AntecedentesPatologicosPersonales = NormalizeOptional(antecedentesPatologicosPersonales);
+        AntecedentesPatologicosFamiliares = NormalizeOptional(antecedentesPatologicosFamiliares);
+        AntecedentesQuirurgicos = NormalizeOptional(antecedentesQuirurgicos);
+        Menarca = NormalizeOptional(menarca);
+        Ciclos = NormalizeOptional(ciclos);
+        Ivsa = NormalizeOptional(ivsa);
+        Fum = fum;
+        Mpf = NormalizeOptional(mpf);
+        Pap = NormalizeOptional(pap);
+        Complicaciones = NormalizeOptional(complicaciones);
         TipoSangre = ValidBloodType(tipoSangre);
         Gestas = ValidObstetricCount(gestas, nameof(gestas));
         Partos = ValidObstetricCount(partos, nameof(partos));

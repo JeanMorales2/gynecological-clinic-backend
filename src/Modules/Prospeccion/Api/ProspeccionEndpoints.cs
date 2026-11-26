@@ -8,7 +8,7 @@ namespace Ginecologia.Modules.Prospeccion.Api;
 
 public sealed record CreateProspectRequest(string NombreCompleto, string Telefono, string? TelefonoAlternativo, string? Email, string? Fuente, string? Notas);
 public sealed record UpdateProspectRequest(string NombreCompleto, string Telefono, string? TelefonoAlternativo, string? Email, string? Fuente, ProspectStatus Estado, string? Notas);
-public sealed record ConvertProspectRequest(DateOnly FechaNacimiento, string? DocumentoIdentidad, string? Alergias, string? AntecedentesRelevantes);
+public sealed record ConvertProspectRequest(DateOnly FechaNacimiento, string? DocumentoIdentidad, string? Alergias, string? AntecedentesPatologicosPersonales);
 
 public static class ProspeccionEndpoints
 {
@@ -62,7 +62,7 @@ public static class ProspeccionEndpoints
     {
         try
         {
-            var prospect = await useCase.ExecuteAsync(id, new ConvertProspectCommand(request.FechaNacimiento, request.DocumentoIdentidad, request.Alergias, request.AntecedentesRelevantes), cancellationToken);
+            var prospect = await useCase.ExecuteAsync(id, new ConvertProspectCommand(request.FechaNacimiento, request.DocumentoIdentidad, request.Alergias, request.AntecedentesPatologicosPersonales), cancellationToken);
             return Results.Ok(prospect);
         }
         catch (ProspectNotFoundException) { return Results.NotFound(); }

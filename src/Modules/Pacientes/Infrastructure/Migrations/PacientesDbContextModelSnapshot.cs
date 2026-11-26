@@ -78,14 +78,34 @@ namespace Ginecologia.Modules.Pacientes.Infrastructure.Migrations
                         .HasColumnType("character varying(4000)")
                         .HasColumnName("alergias");
 
-                    b.Property<string>("AntecedentesRelevantes")
+                    b.Property<string>("AntecedentesPatologicosFamiliares")
                         .HasMaxLength(8000)
                         .HasColumnType("character varying(8000)")
-                        .HasColumnName("antecedentes_relevantes");
+                        .HasColumnName("antecedentes_patologicos_familiares");
+
+                    b.Property<string>("AntecedentesPatologicosPersonales")
+                        .HasMaxLength(8000)
+                        .HasColumnType("character varying(8000)")
+                        .HasColumnName("antecedentes_patologicos_personales");
+
+                    b.Property<string>("AntecedentesQuirurgicos")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)")
+                        .HasColumnName("antecedentes_quirurgicos");
 
                     b.Property<int?>("Cesareas")
                         .HasColumnType("integer")
                         .HasColumnName("cesareas");
+
+                    b.Property<string>("Ciclos")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("ciclos");
+
+                    b.Property<string>("Complicaciones")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("complicaciones");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone")
@@ -101,29 +121,43 @@ namespace Ginecologia.Modules.Pacientes.Infrastructure.Migrations
                         .HasColumnType("character varying(320)")
                         .HasColumnName("email");
 
-                    b.Property<string>("EnfermedadesCronicas")
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)")
-                        .HasColumnName("enfermedades_cronicas");
-
-                    b.Property<string>("EtsIts")
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)")
-                        .HasColumnName("ets_its");
-
                     b.Property<DateOnly>("FechaNacimiento")
                         .HasColumnType("date")
                         .HasColumnName("fecha_nacimiento");
 
+                    b.Property<DateOnly?>("Fum")
+                        .HasColumnType("date")
+                        .HasColumnName("fum");
+
                     b.Property<int?>("Gestas")
                         .HasColumnType("integer")
                         .HasColumnName("gestas");
+
+                    b.Property<string>("Ivsa")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("ivsa");
+
+                    b.Property<string>("Menarca")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("menarca");
+
+                    b.Property<string>("Mpf")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("mpf");
 
                     b.Property<string>("NombreCompleto")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
                         .HasColumnName("nombre_completo");
+
+                    b.Property<string>("Pap")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("pap");
 
                     b.Property<int?>("Partos")
                         .HasColumnType("integer")
@@ -139,11 +173,6 @@ namespace Ginecologia.Modules.Pacientes.Infrastructure.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("character varying(5)")
                         .HasColumnName("tipo_sangre");
-
-                    b.Property<string>("Vicios")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("vicios");
 
                     b.HasKey("Id");
 
