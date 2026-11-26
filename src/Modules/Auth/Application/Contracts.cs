@@ -11,6 +11,13 @@ public interface IAuthAccountRepository
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 
+public interface IPasswordResetTokenRepository
+{
+    Task AddAsync(PasswordResetToken token, CancellationToken cancellationToken = default);
+    Task<PasswordResetToken?> FindByTokenHashAsync(string tokenHash, CancellationToken cancellationToken = default);
+    Task SaveChangesAsync(CancellationToken cancellationToken = default);
+}
+
 public interface IPasswordService
 {
     string Hash(AuthAccount account, string password);
@@ -39,6 +46,9 @@ public sealed class AuthAccountConflictException(string email)
 
 public sealed class InvalidCurrentPasswordException()
     : InvalidOperationException("La contraseña actual no es correcta.");
+
+public sealed class InvalidResetTokenException()
+    : InvalidOperationException("El enlace de recuperación no es válido o ya venció.");
 
 public sealed record PublicAuthUser(Guid Id, string Email, string Role, IReadOnlyList<string> Permisos);
 

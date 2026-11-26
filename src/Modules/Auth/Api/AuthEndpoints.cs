@@ -8,6 +8,8 @@ namespace Ginecologia.Modules.Auth.Api;
 
 public sealed record LoginRequest(string Email, string Password);
 public sealed record ChangePasswordRequest(string CurrentPassword, string NewPassword);
+public sealed record RequestPasswordResetRequest(string Email);
+public sealed record ResetPasswordRequest(string Token, string NewPassword);
 
 public static class AuthEndpoints
 {
@@ -17,6 +19,8 @@ public static class AuthEndpoints
         auth.MapPost("/login", LoginAsync);
         auth.MapGet("/me", GetCurrentUserAsync).RequireAuthorization();
         auth.MapPost("/cambiar-password", ChangePasswordAsync).RequireAuthorization();
+        auth.MapPost("/solicitar-reset", RequestPasswordResetAsync);
+        auth.MapPost("/resetear-password", ResetPasswordAsync);
         return endpoints;
     }
 
@@ -47,6 +51,23 @@ public static class AuthEndpoints
         }
         catch (KeyNotFoundException) { return Results.Unauthorized(); }
         catch (InvalidCurrentPasswordException exception) { return Results.BadRequest(new { message = exception.Message }); }
+        catch (ArgumentException exception) { return Results.BadRequest(new { message = exception.Message }); }
+    }
+
+    private static async Task<IResult> RequestPasswordResetAsync(RequestPasswordResetRequest request, RequestPasswordResetUseCase useCase, CancellationToken cancellationToken)
+    {
+        await useCase.ExecuteAsync(request.Email, cancellationToken);
+        return Results.NoContent();
+    }
+
+    private static async Task<IResult> ResetPasswordAsync(ResetPasswordRequest request, ResetPasswordUseCase useCase, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await useCase.ExecuteAsync(request.Token, request.NewPassword, cancellationToken);
+            return Results.NoContent();
+        }
+        catch (InvalidResetTokenException exception) { return Results.BadRequest(new { message = exception.Message }); }
         catch (ArgumentException exception) { return Results.BadRequest(new { message = exception.Message }); }
     }
 }

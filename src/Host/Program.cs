@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json.Serialization;
 using Ginecologia.Modules.Auth.Api;
+using Ginecologia.Modules.Auth.Application;
 using Ginecologia.Modules.Auth.Infrastructure;
 using Ginecologia.Modules.Autorizacion.Api;
 using Ginecologia.Modules.Autorizacion.Infrastructure;
@@ -47,7 +48,8 @@ var resendOptions = new ResendOptions(
     builder.Configuration["RESEND_API_KEY"],
     builder.Configuration["RESEND_FROM_EMAIL"],
     builder.Configuration["RESEND_FROM_NAME"]);
-builder.Services.AddAuthModule(connectionString, jwtOptions);
+var frontendOptions = new AuthFrontendOptions(builder.Configuration["FRONTEND_URL"] ?? "http://localhost:3000");
+builder.Services.AddAuthModule(connectionString, jwtOptions, frontendOptions);
 builder.Services.AddUsuariosModule(connectionString);
 builder.Services.AddPacientesModule(connectionString);
 builder.Services.AddProspeccionModule(connectionString);
