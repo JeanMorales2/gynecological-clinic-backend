@@ -43,16 +43,10 @@ if (string.IsNullOrWhiteSpace(signingKey) || signingKey.Length < 32)
     throw new InvalidOperationException("JWT_SIGNING_KEY debe contener al menos 32 caracteres.");
 
 var jwtOptions = new JwtOptions(signingKey);
-var smtpPort = int.TryParse(builder.Configuration["SMTP_PORT"], out var configuredSmtpPort) ? configuredSmtpPort : 587;
-var smtpUseStartTls = !bool.TryParse(builder.Configuration["SMTP_USE_STARTTLS"], out var configuredUseStartTls) || configuredUseStartTls;
-var smtpOptions = new SmtpOptions(
-    builder.Configuration["SMTP_HOST"],
-    smtpPort,
-    builder.Configuration["SMTP_USERNAME"],
-    builder.Configuration["SMTP_PASSWORD"],
-    builder.Configuration["SMTP_FROM_EMAIL"],
-    builder.Configuration["SMTP_FROM_NAME"],
-    smtpUseStartTls);
+var resendOptions = new ResendOptions(
+    builder.Configuration["RESEND_API_KEY"],
+    builder.Configuration["RESEND_FROM_EMAIL"],
+    builder.Configuration["RESEND_FROM_NAME"]);
 builder.Services.AddAuthModule(connectionString, jwtOptions);
 builder.Services.AddUsuariosModule(connectionString);
 builder.Services.AddPacientesModule(connectionString);
@@ -63,7 +57,7 @@ builder.Services.AddConsultaMedicaModule(connectionString);
 builder.Services.AddLaboratorioExternoModule(connectionString);
 builder.Services.AddFacturacionModule(connectionString);
 builder.Services.AddInventarioModule(connectionString);
-builder.Services.AddNotificacionesModule(connectionString, smtpOptions);
+builder.Services.AddNotificacionesModule(connectionString, resendOptions);
 builder.Services.AddPromocionesModule(connectionString);
 builder.Services.AddAutorizacionModule(connectionString);
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
