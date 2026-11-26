@@ -34,15 +34,6 @@ public interface IAuthAccountManager
 public sealed record CreateAuthAccountRequest(string Email, string Password, string Role);
 public sealed record AuthAccountSummary(Guid Id, string Email, string Role);
 
-public static class AuthRoleValues
-{
-    public const string Admin = "Admin";
-    public const string Recepcionista = "Recepcionista";
-    public const string Ginecologa = "Ginecologa";
-
-    public static bool IsValid(string role) => role is Admin or Recepcionista or Ginecologa;
-}
-
 public sealed class AuthAccountConflictException(string email)
     : InvalidOperationException($"Ya existe una cuenta para {email}.");
 

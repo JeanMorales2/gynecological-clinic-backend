@@ -22,10 +22,14 @@ public class AuthAccountTests
         Assert.Throws<ArgumentException>(() => AuthAccount.Create(email, "hash", AuthRoles.Admin));
     }
 
-    [Fact]
-    public void Create_ConRolInvalido_Lanza()
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void Create_ConRolVacio_Lanza(string role)
     {
-        Assert.Throws<ArgumentException>(() => AuthAccount.Create("a@b.com", "hash", "SuperAdmin"));
+        // El dominio solo garantiza que el rol no llegue vacio; que exista de verdad
+        // en el catalogo dinamico de roles se valida en la capa de aplicacion (AuthAccountManager).
+        Assert.Throws<ArgumentException>(() => AuthAccount.Create("a@b.com", "hash", role));
     }
 
     [Fact]

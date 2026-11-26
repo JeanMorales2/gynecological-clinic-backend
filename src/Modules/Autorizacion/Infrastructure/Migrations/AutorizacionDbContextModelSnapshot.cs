@@ -40,6 +40,22 @@ namespace Ginecologia.Modules.Autorizacion.Infrastructure.Migrations
                     b.ToTable("permission_definitions", "autorizacion");
                 });
 
+            modelBuilder.Entity("Ginecologia.Modules.Autorizacion.Domain.Rol", b =>
+                {
+                    b.Property<string>("Nombre")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("nombre");
+
+                    b.Property<bool>("EsProtegido")
+                        .HasColumnType("boolean")
+                        .HasColumnName("es_protegido");
+
+                    b.HasKey("Nombre");
+
+                    b.ToTable("roles", "autorizacion");
+                });
+
             modelBuilder.Entity("Ginecologia.Modules.Autorizacion.Domain.RolePermissionGrant", b =>
                 {
                     b.Property<string>("Role")

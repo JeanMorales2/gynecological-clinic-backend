@@ -25,18 +25,24 @@ public sealed class AuthAccount
     {
         var normalizedEmail = NormalizeEmail(email);
         if (string.IsNullOrWhiteSpace(passwordHash)) throw new ArgumentException("El hash de contraseña es obligatorio.", nameof(passwordHash));
-        if (role is not AuthRoles.Admin and not AuthRoles.Recepcionista and not AuthRoles.Ginecologa)
-            throw new ArgumentException("El rol no es válido.", nameof(role));
+        role = RequiredRole(role);
 
         return new AuthAccount(Guid.NewGuid(), normalizedEmail, passwordHash, role, true, DateTime.UtcNow);
     }
 
     public void ChangeRole(string role)
     {
-        if (role is not AuthRoles.Admin and not AuthRoles.Recepcionista and not AuthRoles.Ginecologa)
-            throw new ArgumentException("El rol no es válido.", nameof(role));
+        Role = RequiredRole(role);
+    }
 
-        Role = role;
+    // Que el rol exista de verdad (catalogo dinamico del modulo Autorizacion) se valida en la capa de
+    // aplicacion (AuthAccountManager via RoleExistsUseCase) antes de llamar a Create/ChangeRole; el dominio
+    // solo garantiza que no llegue vacio.
+    private static string RequiredRole(string value)
+    {
+        var normalized = value?.Trim();
+        if (string.IsNullOrWhiteSpace(normalized)) throw new ArgumentException("El rol es obligatorio.", nameof(value));
+        return normalized;
     }
 
     public void SetPasswordHash(string passwordHash)

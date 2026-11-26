@@ -12,10 +12,15 @@ public static class AutorizacionServiceCollectionExtensions
     {
         services.AddDbContext<AutorizacionDbContext>(options => options.UseNpgsql(connectionString, npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "autorizacion")));
         services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+        services.AddScoped<IRolRepository, RolRepository>();
         services.AddScoped<ListPermissionsUseCase>();
         services.AddScoped<ListGrantedPermissionKeysUseCase>();
         services.AddScoped<SetPermissionGrantUseCase>();
         services.AddScoped<IsRolePermittedUseCase>();
+        services.AddScoped<ListRolesUseCase>();
+        services.AddScoped<CreateRolUseCase>();
+        services.AddScoped<DeleteRolUseCase>();
+        services.AddScoped<RoleExistsUseCase>();
         services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
         return services;
     }

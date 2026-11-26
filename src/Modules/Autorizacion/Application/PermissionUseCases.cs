@@ -27,13 +27,13 @@ public sealed class ListGrantedPermissionKeysUseCase(IRolePermissionRepository r
     }
 }
 
-public sealed class SetPermissionGrantUseCase(IRolePermissionRepository repository)
+public sealed class SetPermissionGrantUseCase(IRolePermissionRepository repository, IRolRepository roles)
 {
     public async Task ExecuteAsync(string role, string permissionKey, bool otorgado, CancellationToken ct = default)
     {
         if (role == "Admin")
             throw new ArgumentException("Admin siempre tiene todos los permisos, no se puede modificar.");
-        if (role is not ("Ginecologa" or "Recepcionista"))
+        if (await roles.FindByNombreAsync(role, ct) is null)
             throw new ArgumentException("El rol indicado no es válido.");
 
         var definitions = await repository.ListDefinitionsAsync(ct);

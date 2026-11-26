@@ -1,14 +1,15 @@
 using System.Transactions;
 using Ginecologia.Modules.Auth.Application;
+using Ginecologia.Modules.Autorizacion.Application;
 using Ginecologia.Modules.Usuarios.Domain;
 
 namespace Ginecologia.Modules.Usuarios.Application;
 
-public sealed class CreateStaffUseCase(IAuthAccountManager accounts, IStaffProfileRepository profiles)
+public sealed class CreateStaffUseCase(IAuthAccountManager accounts, IStaffProfileRepository profiles, RoleExistsUseCase roleExists)
 {
     public async Task<StaffDto> ExecuteAsync(CreateStaffCommand command, CancellationToken cancellationToken = default)
     {
-        if (!AuthRoleValues.IsValid(command.Role)) throw new ArgumentException("El rol no es válido.", nameof(command));
+        if (!await roleExists.ExecuteAsync(command.Role, cancellationToken)) throw new ArgumentException("El rol no es válido.", nameof(command));
 
         using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
         var account = await accounts.CreateAsync(new CreateAuthAccountRequest(command.Email, command.Password, command.Role), cancellationToken);

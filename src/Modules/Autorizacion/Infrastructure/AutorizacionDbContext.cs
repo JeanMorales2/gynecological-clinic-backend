@@ -7,10 +7,17 @@ public sealed class AutorizacionDbContext(DbContextOptions<AutorizacionDbContext
 {
     public DbSet<PermissionDefinition> PermissionDefinitions => Set<PermissionDefinition>();
     public DbSet<RolePermissionGrant> RolePermissionGrants => Set<RolePermissionGrant>();
+    public DbSet<Rol> Roles => Set<Rol>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("autorizacion");
+
+        var rol = modelBuilder.Entity<Rol>();
+        rol.ToTable("roles");
+        rol.HasKey(x => x.Nombre);
+        rol.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(50);
+        rol.Property(x => x.EsProtegido).HasColumnName("es_protegido").IsRequired();
 
         var definition = modelBuilder.Entity<PermissionDefinition>();
         definition.ToTable("permission_definitions");

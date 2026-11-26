@@ -1,14 +1,15 @@
 using Ginecologia.Modules.Auth.Domain;
+using Ginecologia.Modules.Autorizacion.Application;
 
 namespace Ginecologia.Modules.Auth.Application;
 
-public sealed class AuthAccountManager(IAuthAccountRepository accounts, IPasswordService passwords) : IAuthAccountManager
+public sealed class AuthAccountManager(IAuthAccountRepository accounts, IPasswordService passwords, RoleExistsUseCase roleExists) : IAuthAccountManager
 {
     public async Task<AuthAccountSummary> CreateAsync(CreateAuthAccountRequest request, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(request.Password))
             throw new ArgumentException("La contraseña inicial es obligatoria.", nameof(request));
-        if (!AuthRoleValues.IsValid(request.Role))
+        if (!await roleExists.ExecuteAsync(request.Role, cancellationToken))
             throw new ArgumentException("El rol no es válido.", nameof(request));
 
         var email = AuthAccount.NormalizeEmail(request.Email);
@@ -24,7 +25,7 @@ public sealed class AuthAccountManager(IAuthAccountRepository accounts, IPasswor
 
     public async Task ChangeRoleAsync(Guid accountId, string role, CancellationToken cancellationToken = default)
     {
-        if (!AuthRoleValues.IsValid(role)) throw new ArgumentException("El rol no es válido.", nameof(role));
+        if (!await roleExists.ExecuteAsync(role, cancellationToken)) throw new ArgumentException("El rol no es válido.", nameof(role));
         var account = await accounts.FindByIdAsync(accountId, cancellationToken)
             ?? throw new KeyNotFoundException("No existe la cuenta de autenticación.");
         account.ChangeRole(role);
