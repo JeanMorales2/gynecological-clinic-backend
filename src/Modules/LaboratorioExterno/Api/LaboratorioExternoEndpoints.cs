@@ -27,6 +27,6 @@ public static class LaboratorioExternoEndpoints
         catch (ArgumentException ex) { return Results.BadRequest(new { message = ex.Message }); }
     }
     private static async Task<IResult> ListAttachmentsAsync(Guid id, ListLabOrderAttachmentsUseCase useCase, CancellationToken ct) => Results.Ok(await useCase.ExecuteAsync(id, ct));
-    private static async Task<IResult> GetAttachmentContentAsync(Guid attachmentId, GetLabOrderAttachmentContentUseCase useCase, CancellationToken ct) { var content = await useCase.ExecuteAsync(attachmentId, ct); return content is null ? Results.NotFound() : Results.File(content.Contenido, content.ContentType, content.NombreArchivo); }
+    private static async Task<IResult> GetAttachmentContentAsync(Guid attachmentId, GetLabOrderAttachmentContentUseCase useCase, CancellationToken ct) { var content = await useCase.ExecuteAsync(attachmentId, ct); return content is null ? Results.NotFound() : Results.File(content.Contenido, content.ContentType); }
     private static async Task<IResult> DeleteAttachmentAsync(Guid attachmentId, DeleteLabOrderAttachmentUseCase useCase, CancellationToken ct) { try { await useCase.ExecuteAsync(attachmentId, ct); return Results.NoContent(); } catch (KeyNotFoundException) { return Results.NotFound(); } }
 }
