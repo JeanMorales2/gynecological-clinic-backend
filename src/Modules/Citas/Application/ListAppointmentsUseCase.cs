@@ -4,9 +4,9 @@ namespace Ginecologia.Modules.Citas.Application;
 
 public sealed class ListAppointmentsUseCase(IAppointmentRepository appointments, AppointmentDtoMapper mapper)
 {
-    public async Task<PagedAppointmentResult<AppointmentDto>> ExecuteAsync(Guid? profesionalId, Guid? patientId, DateOnly? fecha, AppointmentStatus? estado, int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<PagedAppointmentResult<AppointmentDto>> ExecuteAsync(Guid? profesionalId, Guid? patientId, DateOnly? fecha, DateOnly? desde, AppointmentStatus? estado, int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var query = new AppointmentListQuery(profesionalId, patientId, fecha, estado, Math.Max(page, 1), Math.Clamp(pageSize <= 0 ? 10 : pageSize, 1, 100));
+        var query = new AppointmentListQuery(profesionalId, patientId, fecha, desde, estado, Math.Max(page, 1), Math.Clamp(pageSize <= 0 ? 10 : pageSize, 1, 100));
         var result = await appointments.ListAsync(query, cancellationToken);
 
         // Secuencial a proposito: cada MapAsync llama a GetPatientUseCase/GetStaffUseCase, que

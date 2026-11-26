@@ -31,8 +31,8 @@ public static class CitasEndpoints
         return endpoints;
     }
 
-    private static Task<PagedAppointmentResult<AppointmentDto>> ListAsync(Guid? profesionalId, Guid? patientId, DateOnly? fecha, AppointmentStatus? estado, int page, int pageSize, ListAppointmentsUseCase useCase, CancellationToken cancellationToken) =>
-        useCase.ExecuteAsync(profesionalId, patientId, fecha, estado, page, pageSize, cancellationToken);
+    private static Task<PagedAppointmentResult<AppointmentDto>> ListAsync(Guid? profesionalId, Guid? patientId, DateOnly? fecha, DateOnly? desde, AppointmentStatus? estado, int page, int pageSize, ListAppointmentsUseCase useCase, CancellationToken cancellationToken) =>
+        useCase.ExecuteAsync(profesionalId, patientId, fecha, desde, estado, page, pageSize, cancellationToken);
 
     private static async Task<IResult> GetAsync(Guid id, GetAppointmentUseCase useCase, CancellationToken cancellationToken)
     {

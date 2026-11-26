@@ -31,6 +31,12 @@ public sealed class AppointmentRepository(CitasDbContext dbContext) : IAppointme
             var end = start.AddDays(1);
             appointments = appointments.Where(x => x.FechaHoraInicio >= start && x.FechaHoraInicio < end);
         }
+        else if (query.Desde is { } desde)
+        {
+            var localMidnight = DateTime.SpecifyKind(desde.ToDateTime(TimeOnly.MinValue), DateTimeKind.Unspecified);
+            var start = TimeZoneInfo.ConvertTimeToUtc(localMidnight, ClinicTimeZone);
+            appointments = appointments.Where(x => x.FechaHoraInicio >= start);
+        }
 
         var totalCount = await appointments.CountAsync(cancellationToken);
         var items = await appointments.OrderBy(x => x.FechaHoraInicio).ThenBy(x => x.CreatedAtUtc)
